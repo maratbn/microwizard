@@ -34,11 +34,20 @@ If you're comfortable working inside a VM we also provide a Vagrant template tha
 
 Now the fun part:
 
-4. Run the chaosmonkey.py script. Hit reload. Notice how everything is running!
-5. Disable auto-restart for the popularity service. Kill the
-   popularity service. Notice how the webiste still runs, but popularity
-   disappears.
+4. We introduce a bug in the popularity component, e.g., the
+popularity algorithm takes 1000 longer to compute. We make the change
+live.
+  - Notice how the website still works even though the popularity calc doesn't appear for awhile
+  - If this were in the monolith the monolith would grind to a halt
 
+5. Fix the code, and do an incremental rollout of the code.
+   - Make sure no regressions, you can see for 50% of the loads it's pretty fast and for the other 50% it's not
+
+
+This is what's great about microservices:
+
+ - independently deployable code
+ - resilience to software bugs
 
 
 # MicroWizard Architecture #
