@@ -4,11 +4,9 @@ Alt name ideas:
 * Microservices Hero (like the Jukebox Hero?)
 * MicroWizard (Play on the DropWizard framework which popularized simple REST services in Java via glueing best of class components together)
 
-The Datawire Microservices Playground is designed to be a combination of hacking sandbox for developers interested in
-microservice architectures as well as a very simple reference architecture that can be used as a launch point for teams
-that want to get started quickly.
+The Microservices Playground is a hacking sandbox for developers interested in microservice architectures.
 
-The Playground uses an existing example 2-tier application named [Lobsters](https://github.com/jcs/lobsters) as the core
+A common challenge that developers face in developing microservices is how to migrate from a monolith to a microservies architecture. The Playground is intended to serve as an example on how to add a single microservice to an existing monolith, enabling more rapid feature development. The Playground uses an existing Ruby on Rails application named [Lobsters](https://github.com/jcs/lobsters) as the core
  application to demonstrate enhancement around using Microservices.
  
 # Getting Started #
@@ -27,17 +25,34 @@ OS level changes, however, documentation for installation and setup can be found
 
 If you're comfortable working inside a VM we also provide a Vagrant template that can setup a working environment.
 
- # Installation #
+# Quick Start #
 
 1. Clone the Playground project on GitHub
-2. Run the installation tool
-3. Start Hacking!
+2. Run install.sh
+   - This will prepopulate the system with some test data
+3. Go to http://localhost:3000/ to see the Lobster webapp running.
 
-# What the Playground Provides #
+Now the fun part:
 
-1. A running instance of Lobsters inside a Docker container
-2. A running instance of MariaDB inside another Docker container.
-3. A running instance of the Datawire directory inside a Docker container.
+4. Run the chaosmonkey.py script. Hit reload. Notice how everything is running!
+5. Disable auto-restart for the popularity service. Kill the
+   popularity service. Notice how the webiste still runs, but popularity
+   disappears.
+
+
+
+# MicroWizard Architecture #
+
+How does this all work?
+
+* The monolithic Lobsters Ruby on Rails application, running in a Docker container
+* MariaDB
+* The popularity microservice, written as a Python application
+* A simple service discovery service
+
+
+
+
 
 # Building a new Microservice #
 
