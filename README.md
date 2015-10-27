@@ -47,13 +47,27 @@ Let's build a new containerized Microservice...
 
 Launching a new microservice
 
+* Service implements a new feature... let's call it the popularity service which returns the most popular users by their
+karma
+
+* Implement the service in Python or Node.
+* Communicate with MariaDB to run the simple query
+* Actually launches two of these services 
+
 # Consuming the Microservice #
 
 How to use the microservice from inside their dev and production environments
 
+* Update Lobster to have a new URL that communicates with the Popularity Service
+* Renders that data
+
 # How it works #
 
 How what the developer just did works.
+
+* Baker Street!
+* Btw did we mention that ChaosMonkey (or equivalent) was running in the background and killing the Popularity Service
+and stuff just continued to work?
 
 # FAQ #
 
