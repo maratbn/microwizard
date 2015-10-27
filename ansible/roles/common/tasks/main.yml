@@ -1,0 +1,39 @@
+---
+# file: roles/common/tasks/main.yml
+
+- name: ensure centos is updated
+  yum:
+    name: "*"
+    state: latest
+  tags:
+    - common
+
+- name: ensure essential packages are installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: essential_system_packages
+  tags:
+    - common
+
+- name: ensure additional packages are installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: additional_system_packages
+  tags:
+    - common
+
+- name: ensure essential python packages are installed
+  pip:
+    name:
+  with_items: essential_python_packages
+  tags:
+    - common
+
+- name: ensure additional python packages are installed
+  pip:
+    name:
+  with_items: additonal_python_packages
+  tags:
+    - common

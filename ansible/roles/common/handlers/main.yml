@@ -1,0 +1,15 @@
+---
+# file: roles/common/handlers/main.yml
+
+- name: list untagged images
+  command: docker images -f "dangling=true" -q
+  register: untagged
+
+- name: remove untagged images
+  command: docker rmi {{ item|default(['']) }}
+  with_items: "{{ untagged.stdout_lines }}"
+  ignore_errors: true
+
+- name: show untagged images
+  debug:
+    var: untagged

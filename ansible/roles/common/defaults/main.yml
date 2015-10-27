@@ -1,0 +1,15 @@
+---
+# file: roles/common/defaults/main.yml
+
+essential_system_packages:
+  - curl
+  - docker-engine
+  - python-pip
+  - python-devel
+
+additional_system_packages: []
+
+essential_python_packages:
+  - docker-py
+
+additional_python_packages: []
