@@ -1,5 +1,9 @@
 # Datawire Microservices Playground #
 
+Alt name ideas:
+* Microservices Hero (like the Jukebox Hero?)
+* MicroWizard (Play on the DropWizard framework which popularized simple REST services in Java via glueing best of class components together)
+
 The Datawire Microservices Playground is designed to be a combination of hacking sandbox for developers interested in
 microservice architectures as well as a very simple reference architecture that can be used as a launch point for teams
 that want to get started quickly.
@@ -11,8 +15,10 @@ The Playground uses an existing example 2-tier application named [Lobsters](http
 
 To get started your system will the following pre-requisite software:
 
-1. Docker
-2. Docker Registry 
+| Software | Installation Instructions |
+| -------- | -----|
+| Docker | <ul><li>[Mac OS X](https://docs.docker.com/installation/mac/)</li><li>[Debian](https://docs.docker.com/installation/debian/)</li><li>[Fedora](https://docs.docker.com/installation/fedora/)</li><li>[Ubuntu](https://docs.docker.com/installation/ubuntulinux/)<li>[Windows](https://docs.docker.com/installation/windows/)</li><li>[Other](https://docs.docker.com/installation/)</li>
+| Docker Registry | [All Platforms](https://docs.docker.com/registry/)
 
 Installing those two components is above and beyond the scope of this document because they require approving several
 OS level changes, however, documentation for installation and setup can be found at the following URLs: 
@@ -21,7 +27,7 @@ OS level changes, however, documentation for installation and setup can be found
 
 If you're comfortable working inside a VM we also provide a Vagrant template that can setup a working environment.
 
-# Installation #
+ # Installation #
 
 1. Clone the Playground project on GitHub
 2. Run the installation tool
@@ -35,5 +41,19 @@ If you're comfortable working inside a VM we also provide a Vagrant template tha
 
 # Building a new Microservice #
 
-Let's build a new containerized Microservice
+Let's build a new containerized Microservice...
+
+# Launching the Microservices #
+
+Launching a new microservice
+
+# Consuming the Microservice #
+
+How to use the microservice from inside their dev and production environments
+
+# How it works #
+
+How what the developer just did works.
+
+# FAQ #
 
