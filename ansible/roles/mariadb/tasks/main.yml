@@ -1,0 +1,23 @@
+---
+# file: roles/mariadb/tasks/main.yml
+
+- name: ensure mariadb volume directory is created
+  file:
+    path: "{{ microwizard_docker_volumes }}/{{ db_name }}"
+    state: directory
+  tags:
+    - mariadb
+
+- name: ensure mariadb is running
+  docker:
+    name: "{{ db_name }}-mariadb"
+    image: mariadb:{{ mariadb_image_version }}
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ db_root_password }}"
+      MYSQL_DATABASE: "{{ db_name }}"
+      MYSQL_USER: "{{ db_user }}"
+      MYSQL_PASSWORD: "{{ db_password }}"
+    volumes:
+      - "{{ microwizard_docker_volumes }}/{{ db_name }}:/var/lib/mysql"
+  tags:
+    - mariadb

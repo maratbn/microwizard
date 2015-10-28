@@ -3,7 +3,7 @@
 
 - name: ensure base image dockerfile is configured
   template:
-    dest: /dw/docker/base/Dockerfile
+    dest: "{{ microwizard_docker_images }}/base/Dockerfile"
     src: base_Dockerfile.j2
   tags:
     - common
@@ -13,7 +13,7 @@
   docker_image:
     name: microwizard/base
     nocache: yes
-    path: /dw/docker/base
+    path: "{{ microwizard_docker_images }}/base"
     state: present
   notify:
     - list untagged images

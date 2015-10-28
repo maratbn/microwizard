@@ -1,0 +1,11 @@
+---
+# file: roles/mariadb/defaults/main.yml
+
+mariadb_image_version: latest
+
+db_root_password: notasecret
+
+
+#db_user:
+#db_password:
+#db_name:

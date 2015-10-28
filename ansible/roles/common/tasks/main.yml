@@ -39,4 +39,11 @@
   tags:
     - common
 
+- name: create a docker volume root directory
+  file:
+    path: "{{ microwizard_docker_volumes }}"
+    state: directory
+  tags:
+    - common
+
 - include: base_image.yml
