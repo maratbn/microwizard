@@ -1,3 +1,6 @@
 .idea
 .directory
 .vagrant
+
+docker/base/Dockerfile
+docker/base/Dockerfile.j2

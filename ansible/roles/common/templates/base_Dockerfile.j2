@@ -1,0 +1,9 @@
+FROM phusion/baseimage:0.9.17
+MAINTAINER datawire.io <hello@datawire.io>
+
+RUN curl -s {{ datawire_repository_url }} | bash
+RUN apt-get install -y\
+ datawire-directory\
+ datawire-sherlock\
+ datawire-watson\
+ python-pip

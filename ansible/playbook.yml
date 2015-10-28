@@ -3,9 +3,6 @@
   remote_user: vagrant
   sudo: yes
 
-  vars:
-    user: vagrant
-    user_group: vagrant
-
   roles:
-    - common
+    - role: common
+      datawire_repository: staging

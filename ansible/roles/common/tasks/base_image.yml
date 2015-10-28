@@ -1,0 +1,24 @@
+---
+# file: roles/common/tasks/base_image.yml
+
+- name: ensure base image dockerfile is configured
+  template:
+    dest: /dw/docker/base/Dockerfile
+    src: base_Dockerfile.j2
+  tags:
+    - common
+    - base
+
+- name: ensure base image is built
+  docker_image:
+    name: microwizard/base
+    nocache: yes
+    path: /dw/docker/base
+    state: present
+  notify:
+    - list untagged images
+    - show untagged images
+    - remove untagged images
+  tags:
+    - common
+    - base

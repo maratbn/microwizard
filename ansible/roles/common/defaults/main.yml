@@ -1,6 +1,15 @@
 ---
 # file: roles/common/defaults/main.yml
 
+# ------------------------------------------------------------------------------
+# Datawire Configuration
+# ------------------------------------------------------------------------------
+datawire_repository: stable
+datawire_repository_url: https://packagecloud.io/install/repositories/datawire/{{ datawire_repository }}/script.deb.sh
+
+# ------------------------------------------------------------------------------
+# General Configuration
+# ------------------------------------------------------------------------------
 essential_system_packages:
   - curl
   - docker-engine

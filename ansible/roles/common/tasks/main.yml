@@ -26,14 +26,17 @@
 
 - name: ensure essential python packages are installed
   pip:
-    name:
+    name: "{{ item }}"
   with_items: essential_python_packages
   tags:
     - common
 
 - name: ensure additional python packages are installed
   pip:
-    name:
+    name: "{{ item }}"
   with_items: additonal_python_packages
+  when: additional_python_packages
   tags:
     - common
+
+- include: base_image.yml
