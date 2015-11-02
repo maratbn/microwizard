@@ -39,7 +39,7 @@
   tags:
     - common
 
-- name: create a docker volume root directory
+- name: create a docker volume data directory
   file:
     path: "{{ microwizard_docker_volumes }}"
     state: directory

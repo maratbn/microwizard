@@ -1,0 +1,8 @@
+---
+# file: roles/lobster/meta/main.yml
+
+dependencies:
+  - role: mariadb
+    db_name: "{{ lobster_db_name }}"
+    db_user: "{{ lobster_db_user }}"
+    db_password: "{{ lobster_db_password }}"

@@ -1,0 +1,18 @@
+---
+# file: roles/lobster/defaults/main.yml
+
+lobsters_image_version: dev
+
+lobster_domain: example.com
+lobster_name: Example News
+lobster_secret: notasecret
+
+# ------------------------------------------------------------------------------
+# Database Configuration
+# ------------------------------------------------------------------------------
+
+lobster_db_name: lobsters
+lobster_db_user: lobsters
+lobster_db_password: lobsters
+
+lobster_db_connection_pool_size: 5

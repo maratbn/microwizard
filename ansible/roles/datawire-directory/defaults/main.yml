@@ -1,0 +1,4 @@
+---
+# file: roles/datawire-directory/defaults/main.yml
+
+dw_directory_image_version: test

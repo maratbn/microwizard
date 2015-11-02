@@ -12,9 +12,9 @@
 - name: ensure base image is built
   docker_image:
     name: microwizard/base
-    nocache: yes
+    nocache: no
     path: "{{ microwizard_docker_images }}/base"
-    state: present
+    state: build
   notify:
     - list untagged images
     - show untagged images

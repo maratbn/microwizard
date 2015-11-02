@@ -28,6 +28,8 @@ If you're comfortable working inside a VM we also provide a Vagrant template tha
 # Quick Start #
 
 1. Clone the Playground project on GitHub
+2. Run `vagrant up`
+
 2. Run install.sh
    - This will prepopulate the system with some test data
 3. Go to http://localhost:3000/ to see the Lobster webapp running.

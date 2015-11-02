@@ -1,0 +1,50 @@
+---
+# file: roles/lobster/tasks/main.yml
+
+- name: generate lobsters database configuration
+  template:
+    src: database.yml.j2
+    dest: "{{ microwizard_sources }}/lobsters/config/database.yml"
+  tags:
+    - lobsters
+
+- name: generate lobsters secret
+  template:
+    src: production.rb.j2
+    dest: "{{ microwizard_sources }}/lobsters/config/initializers/secret_token.rb"
+  tags:
+    - lobsters
+
+- name: generate lobsters url info
+  template:
+    src: production.rb.j2
+    dest: "{{ microwizard_sources }}/lobsters/config/initializers/production.rb"
+  tags:
+    - lobsters
+
+- name: build the lobster image
+  docker_image:
+    name: microwizard/lobsters
+    nocache: no
+    path: "{{ microwizard_docker_images }}/lobsters"
+    state: build
+  tags:
+    - lobsters_base
+
+- name: start the lobsters container
+  docker:
+    name: lobsters
+    image: microwizard/lobsters
+    env:
+      dockerhost: 192.168.22.10 # needs to be made dynamic
+      mapped_port: 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - "{{ microwizard_sources }}/lobsters:/usr/src/lobsters"
+    links:
+      - "{{ lobster_db_name }}-db:db"
+      - "directory:directory"
+    state: restarted
+  tags:
+    - lobsters

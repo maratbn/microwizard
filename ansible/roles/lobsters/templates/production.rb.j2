@@ -1,0 +1,11 @@
+class << Rails.application
+  def domain
+    "{{ lobster_domain }}"
+  end
+
+  def name
+    "{{ lobster_name }}"
+  end
+end
+
+Rails.application.routes.default_url_options[:host] = Rails.application.domain

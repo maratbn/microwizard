@@ -1,0 +1,34 @@
+---
+# file: lobster-popularity-service/tasks/main.yml
+
+- name: generate lobsters-popularity configuration
+  template:
+    src: config.yml.j2
+    dest: "{{ microwizard_sources }}/lobsters-popularity/config.yml"
+  tags:
+    - lobsters
+
+- name: build the lobster-popularity service image
+  docker_image:
+    name: microwizard/lobsters-popularity
+    nocache: no
+    path: "{{ microwizard_docker_images }}/lobsters-popularity"
+    state: build
+  tags:
+    - lobsters_popularity_base
+
+#- name: start the lobsters-popularity containers
+#  docker:
+#    name: lobsters
+#    image: microwizard/lobsters
+#    env:
+#      mapped_port: 3000
+#    ports:
+#      - 3000:3000
+#    volumes:
+#      - "{{ microwizard_sources }}/lobsters-popularity:/usr/src/lobsters-popularity"
+#    links:
+#      - "{{ lobster_db_name }}-db:db"
+#    state: restarted
+#  tags:
+#    - lobsters

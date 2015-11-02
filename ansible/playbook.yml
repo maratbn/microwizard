@@ -6,7 +6,7 @@
   roles:
     - role: common
       datawire_repository: staging
-    - role: mariadb
-      db_name: lobster
-      db_user: lobster
-      db_password: lobster
+    - role: datawire-directory
+    - role: lobsters
+#    - role: lobster-popularity-service
+#      count: 2

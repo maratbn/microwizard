@@ -1,0 +1,11 @@
+---
+development:
+  web:
+    listen: 0.0.0.0
+    port: 5001
+  database:
+    host: <%= ENV['DB_PORT_3306_ADDR'] =>
+    port: <%= ENV['DB_PORT_3306'] =>
+    database: lobster
+    username: lobster
+    password: lobster

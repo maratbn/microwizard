@@ -1,0 +1,8 @@
+---
+# file: roles/lobsters/seed.yml
+
+- name: seed lobsters with data
+  command: docker exec -it lobsters
+  tags:
+    - lobsters
+    - lobsters_seed

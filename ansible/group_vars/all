@@ -8,5 +8,8 @@
 # Location on the host where MicroWizard will resolve Docker image builds
 microwizard_docker_images: /microwizard/docker/images
 
-# Local on the host where MicroWizard will store Docker volumes
-microwizard_docker_volumes: /microwizard/docker/volumes
+# Local on the host where MicroWizard will store Docker data volumes
+microwizard_docker_volumes: /microwizard/data
+
+# Location on the host where MicroWizard will resolve sources
+microwizard_sources: /microwizard/src

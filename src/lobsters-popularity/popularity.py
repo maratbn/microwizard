@@ -14,16 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import pymysql
+import re
 import sys
 import threading
 import uuid
+import yaml
 
 from flask import Flask, jsonify
 app = Flask(__name__)
 
 index = 0
 service_id = uuid.uuid4()
-version = "1"
+config = {}
 
 query = "SELECT username, karma FROM users WHERE banned_at IS NULL ORDER BY karma ASC"
 
@@ -64,7 +68,39 @@ def health_check():
     increment_index()
     return jsonify(service_id=str(service_id), index=index, status='OK')
 
+
+def env_regex(loader, node):
+    value = loader.construct_scalar(node)
+    var = pattern.match(value).groups()[0]
+    return os.environ[var]
+
+def connect(db_config):
+    return pymysql.connect(
+        charset=db_config['db_charset'],
+        cursorclass=pymysql.cursors.DictCursor,
+        db=db_config['database'],
+        host=db_config['host'],
+        password=db_config['password'],
+        port=db_config['port'],
+        user=db_config['username']
+    )
+
 if __name__ == "__main__":
+    pattern = re.compile(r'^<%= ENV\[\'(.*)\'\] %>$')
+    yaml.add_implicit_resolver('!env_regex', pattern)
+
+    def env_regex(loader, node):
+        value = loader.construct_scalar(node)
+        var = pattern.match(value).groups()[0]
+        return os.environ[var]
+
+    yaml.add_constructor('!env_regex', env_regex)
+
     passed_args = sys.argv
-    version = passed_args[2]
-    app.run(port=int(passed_args[1]), host="0.0.0.0")
+    with open(passed_args[2], 'r') as f:
+        config = yaml.load(f)
+
+    db = connect(config[passed_args[1]]['database'])
+
+    # only using debug=True for the nice auto-reload on change feature
+    app.run(debug=True, port=int(config[passed_args[1]]['web']['port']), host=str(config['web']['listen']))

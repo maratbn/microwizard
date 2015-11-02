@@ -4,6 +4,7 @@ sudo cp /tmp/docker.repo /etc/yum.repos.d/docker.repo
 sudo chown root:root /etc/yum.repos.d/docker.repo
 sudo chmod 0644 /etc/yum.repos.d/docker.repo
 
+sudo yum -y install deltarpm
 sudo yum -y install epel-release
 sudo yum -y update
 sudo yum -y install gcc python-devel python-pip docker-engine
