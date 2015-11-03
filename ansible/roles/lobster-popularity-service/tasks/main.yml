@@ -17,18 +17,18 @@
   tags:
     - lobsters_popularity_base
 
-#- name: start the lobsters-popularity containers
-#  docker:
-#    name: lobsters
-#    image: microwizard/lobsters
-#    env:
-#      mapped_port: 3000
-#    ports:
-#      - 3000:3000
-#    volumes:
-#      - "{{ microwizard_sources }}/lobsters-popularity:/usr/src/lobsters-popularity"
-#    links:
-#      - "{{ lobster_db_name }}-db:db"
-#    state: restarted
-#  tags:
-#    - lobsters
+- name: start the lobsters-popularity containers
+  docker:
+    name: lobsters
+    image: microwizard/lobsters
+    env:
+      mapped_port: 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - "{{ microwizard_sources }}/lobsters-popularity:/usr/src/lobsters-popularity"
+    links:
+      - "{{ lobster_db_name }}-db:db"
+    state: restarted
+  tags:
+    - lobsters

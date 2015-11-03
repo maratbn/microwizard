@@ -9,4 +9,3 @@
     - role: datawire-directory
     - role: lobsters
 #    - role: lobster-popularity-service
-#      count: 2

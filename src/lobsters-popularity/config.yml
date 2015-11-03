@@ -4,8 +4,8 @@ development:
     listen: 0.0.0.0
     port: 5001
   database:
-    host: <%= ENV['DB_PORT_3306_ADDR'] =>
-    port: <%= ENV['DB_PORT_3306'] =>
+    host: <%= ENV['DB_PORT_3306_TCP_ADDR'] =>
+    port: <%= ENV['DB_PORT_3306_TCP_PORT'] =>
     database: lobster
     username: lobster
     password: lobster

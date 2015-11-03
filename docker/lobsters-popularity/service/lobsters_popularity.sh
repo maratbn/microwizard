@@ -13,5 +13,5 @@
 #
 # Runit documentation can be found here: http://smarden.org/runit/
 
-cd /usr/src/lobsters
-exec rails server
+cd /usr/src/lobsters-popularity
+exec python popularity.py config.yml
