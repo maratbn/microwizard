@@ -8,7 +8,17 @@ The Microservices Playground is a hacking sandbox for developers interested in m
 
 A common challenge that developers face in developing microservices is how to migrate from a monolith to a microservies architecture. The Playground is intended to serve as an example on how to add a single microservice to an existing monolith, enabling more rapid feature development. The Playground uses an existing Ruby on Rails application named [Lobsters](https://github.com/jcs/lobsters) as the core
  application to demonstrate enhancement around using Microservices.
- 
+
+# Requirements #
+
+These are not so much requirements as minimum tested software combinations...
+
+| Software | Version | Instructions |
+| -------- | ------- | ------------------------- |
+| Ansible  | >=1.9.4 | [Install](http://docs.ansible.com/ansible/intro_installation.html) |
+| Vagrant  | >=1.7.4 | [Install](https://docs.vagrantup.com/v2/installation/index.html) |
+| VirtualBox | >= 5.0 | [Install](https://www.virtualbox.org/wiki/Downloads) |
+
 # Getting Started #
 
 To get started your system will the following pre-requisite software:

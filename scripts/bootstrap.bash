@@ -9,7 +9,7 @@ sudo yum -y install epel-release
 sudo yum -y update
 sudo yum -y install gcc python-devel python-pip docker-engine
 sudo yes | pip install --upgrade pip
-sudo yes | pip install ansible==1.9.2
+sudo yes | pip install ansible==1.9.4
 
 sudo usermod -aG docker vagrant
 
