@@ -1,17 +1,12 @@
-# Datawire Microservices Playground #
+# Datawire MicroWizard #
 
-Alt name ideas:
-* Microservices Hero (like the Jukebox Hero?)
-* MicroWizard (Play on the DropWizard framework which popularized simple REST services in Java via glueing best of class components together)
+The Datawire MicroWizard is a sandbox tool for playing with microservices. It is a very basic reference architecture for building, deploying and fiddling about with microservices.
 
-The Microservices Playground is a hacking sandbox for developers interested in microservice architectures.
-
-A common challenge that developers face in developing microservices is how to migrate from a monolith to a microservies architecture. The Playground is intended to serve as an example on how to add a single microservice to an existing monolith, enabling more rapid feature development. The Playground uses an existing Ruby on Rails application named [Lobsters](https://github.com/jcs/lobsters) as the core
- application to demonstrate enhancement around using Microservices.
+At the moment we envision MicroWizard as a Getting Started tool for developers that zero experience with microservice architectures. In it's current state it's a great tool for getting your feet wet and seeing what the benefits of microservices. A common challenge that developers face in developing microservices is how to migrate from a monolith to a microservices architecture. The Playground is intended to serve as an example on how to add a single microservice to an existing monolith, enabling more rapid feature development. The Playground uses an existing Ruby on Rails application named [Lobsters](https://github.com/jcs/lobsters) as the core application to demonstrate enhancement around using Microservices.
 
 # Requirements #
 
-These are not so much requirements as minimum tested software combinations...
+The MicroWizard base system runs inside of a VirtualBox VM. We provision the VM using Vagrant and then use a combination of shell scripts, Ansible playbooks and custom code to smooth over the experience. Developers at a minimum should have the following software installed:
 
 | Software | Version | Instructions |
 | -------- | ------- | ------------------------- |
@@ -19,19 +14,9 @@ These are not so much requirements as minimum tested software combinations...
 | Vagrant  | >=1.7.4 | [Install](https://docs.vagrantup.com/v2/installation/index.html) |
 | VirtualBox | >= 5.0 | [Install](https://www.virtualbox.org/wiki/Downloads) |
 
-# Getting Started #
+# Getting Started (VM) #
 
-To get started your system will the following pre-requisite software:
-
-| Software | Installation Instructions |
-| -------- | -----|
-| Docker | <ul><li>[Mac OS X](https://docs.docker.com/installation/mac/)</li><li>[Debian](https://docs.docker.com/installation/debian/)</li><li>[Fedora](https://docs.docker.com/installation/fedora/)</li><li>[Ubuntu](https://docs.docker.com/installation/ubuntulinux/)<li>[Windows](https://docs.docker.com/installation/windows/)</li><li>[Other](https://docs.docker.com/installation/)</li>
-| Docker Registry | [All Platforms](https://docs.docker.com/registry/)
-
-Installing those two components is above and beyond the scope of this document because they require approving several
-OS level changes, however, documentation for installation and setup can be found at the following URLs: 
-
-### Alternative Getting Started (VM) ###
+MicroWizard bootstraps inside of a VM. To 
 
 If you're comfortable working inside a VM we also provide a Vagrant template that can setup a working environment.
 

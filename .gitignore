@@ -4,5 +4,5 @@
 
 docker/base/Dockerfile
 docker/base/Dockerfile.j2
-src/lobsters
+
 src/lobsters-popularity
