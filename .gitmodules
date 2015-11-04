@@ -1,0 +1,4 @@
+[submodule "src/lobsters-popularity"]
+	path = src/lobsters-popularity
+	url = https://github.com/datawire/lobsters-popularity
+        ignore = dirty
