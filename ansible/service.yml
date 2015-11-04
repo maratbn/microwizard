@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: vagrant
+  sudo: yes
+  roles:
+    - role: lobsters-popularity-service
+      lobster_db_name: lobsters
+      lobster_db_user: lobsters
+      lobster_db_password: lobsters

@@ -18,11 +18,29 @@ from docopt import docopt
 datawire_config_file = '/etc/datawire/datawire.conf'
 
 def configure_for_docker(**kwargs):
+    from docker import Client
+    from pprint import pprint
 
     """Configures Baker Street for a vanilla Docker deployment"""
 
-    template_vars = {'routable_address': os.environ['dockerhost'],
-                     'mapped_port': os.environ['mapped_port'],
+    # this is some nasty stuff; we're mounting the docker socket into the container to make this work then we're
+    # grabbing a generated ID from the environment variables to lookup the container by name.
+    #
+    # With the container ID we can then lookup the exposed port on the host as well as the containers IP address.
+    #
+    # I don't like this at all! But it's going to work for now...
+    docker_client = Client(base_url='unix://var/run/docker.sock')
+    c_id = os.environ['container_name']
+    c_info = docker_client.inspect_container(c_id)
+    c_net = c_info['NetworkSettings']
+    # pprint(c_net)
+    # c_ports = c_net['Ports']
+    # port = '{}/tcp'.format(os.environ['exposed_port'])
+    # c_port_map = c_ports[port]
+    # c_port_mapped_to_exposed_port = c_port_map[0]['HostPort']
+    c_container_address = c_net['IPAddress']
+    template_vars = {'routable_address': os.getenv("routable_address", c_container_address),
+                     'mapped_port': os.environ['exposed_port'],  # c_port_mapped_to_exposed_port,
                      'dw_directory_host': os.environ['DIRECTORY_PORT_5672_TCP_ADDR']}
 
     content = render(template=datawire_config_file, template_vars=template_vars)

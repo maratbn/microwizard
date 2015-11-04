@@ -6,6 +6,7 @@ development:
   database:
     host: <%= ENV['DB_PORT_3306_TCP_ADDR'] %>
     port: <%= ENV['DB_PORT_3306_TCP_PORT'] %>
-    database: {{ lobster_pop_db_name }}
-    username: {{ lobster_pop_db_user }}
-    password: {{ lobster_pop_db_password }}
+    database: {{ lobster_db_name }}
+    username: {{ lobster_db_user }}
+    password: {{ lobster_db_password }}
+    charset: utf8mb4

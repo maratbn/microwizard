@@ -23,6 +23,9 @@
     command: "/bin/bash -c '/usr/bin/directory -n $(hostname -i) -p 5672 -l DEBUG'"
     image: microwizard/base
     name: directory
+    env:
+      container_name: directory
+      exposed_port: 5672
     expose:
       - 5672
     pull: missing

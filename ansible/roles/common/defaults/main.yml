@@ -13,6 +13,7 @@ datawire_repository_url: https://packagecloud.io/install/repositories/datawire/{
 essential_system_packages:
   - curl
   - docker-engine
+  - git
   - python-pip
   - python-devel
 

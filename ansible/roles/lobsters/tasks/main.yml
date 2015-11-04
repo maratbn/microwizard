@@ -36,12 +36,16 @@
     name: lobsters
     image: microwizard/lobsters
     env:
+      container_name: lobsters
+      exposed_port: 3000
       dockerhost: 192.168.22.10 # needs to be made dynamic
+      routable_address: 192.168.22.10
       mapped_port: 3000
     ports:
       - 3000:3000
     volumes:
       - "{{ microwizard_sources }}/lobsters:/usr/src/lobsters"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     links:
       - "{{ lobster_db_name }}-db:db"
       - "directory:directory"
