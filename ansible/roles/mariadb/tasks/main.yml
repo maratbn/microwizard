@@ -13,6 +13,10 @@
   docker:
     name: "{{ db_name }}-db"
     image: mariadb:{{ mariadb_image_version }}
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
     env:
       MYSQL_ROOT_PASSWORD: "{{ db_root_password }}"
       MYSQL_DATABASE: "{{ db_name }}"
