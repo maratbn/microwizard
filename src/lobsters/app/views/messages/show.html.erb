@@ -1,0 +1,90 @@
+<div class="box wide">
+  <div class="legend" style="float: right;">
+    <% if @message.author_user_id == @user.id %>
+      <a href="/messages/sent">Back to Sent Messages</a>
+    <% else %>
+      <a href="/messages">Back to Messages</a>
+    <% end %>
+  </div>
+
+  <div class="legend">
+    <%= @message.subject %>
+
+    <div class="sublegend">
+      Sent from
+      <% if @message.author %>
+        <a href="/u/<%= @message.author.username %>"><%=
+          @message.author.username %></a>
+        <% if @message.author.is_admin? %>
+          (administrator)
+        <% elsif @message.author.is_moderator? %>
+          (moderator)
+        <% end %>
+      <% else %>
+        <%= @message.author_username %>
+      <% end %>
+      to
+      <a href="/u/<%= @message.recipient.username %>"><%=
+        @message.recipient.username %></a>
+      <%= time_ago_in_words_label(@message.created_at) %> ago
+    </div>
+  </div>
+
+  <div class="boxline comment_text">
+    <%= raw @message.linkified_body %>
+  </div>
+
+  <br>
+
+  <div class="boxline">
+    <div style="float: left;">
+      <%= form_tag message_path(@message.short_id), :method => :delete do %>
+        <%= submit_tag "Delete Message" %>
+      <% end %>
+    </div>
+
+    <div style="float: left; padding-left: 1em;">
+      <%= form_tag message_path(@message.short_id) + "/keep_as_new",
+      :method => :post do %>
+        <%= submit_tag "Keep As New" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div style="clear: both;"></div>
+
+  <br>
+
+  <div class="legend">
+    Compose Reply
+    <% if @new_message %>
+      To <%= @new_message.recipient_username %>
+    <% end %>
+  </div>
+
+  <% if @new_message %>
+    <%= form_for @new_message, :method => :post do |f| %>
+      <%= f.hidden_field :recipient_username %>
+
+      <%= error_messages_for @new_message %>
+
+      <div class="boxline">
+        <%= f.text_field :subject, :style => "width: 500px;",
+          :autocomplete => "off" %>
+      </div>
+
+      <div class="boxline">
+        <%= f.text_area :body, :style => "width: 500px;", :rows => 5,
+          :autocomplete => "off" %>
+      </div>
+
+      <div class="boxline">
+        <p></p>
+        <%= submit_tag "Send Message" %>
+      </div>
+    <% end %>
+  <% else %>
+    This message cannot be replied to.  Please contact a moderator for
+    assistance.
+  <% end %>
+</div>

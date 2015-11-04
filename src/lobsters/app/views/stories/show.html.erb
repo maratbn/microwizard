@@ -1,0 +1,68 @@
+<ol class="stories">
+  <%= render :partial => "stories/listdetail",
+    :locals => { :story => @story, :single_story => true } %>
+</ol>
+
+<div class="story_content">
+  <% if @story.markeddown_description.present? %>
+    <div class="story_text">
+      <%= raw @story.markeddown_description %>
+    </div>
+  <% end %>
+
+  <% if @story.is_unavailable && @story.story_cache.present? %>
+    <a id="story_text_expander">Source URL considered unavailable as of <%=
+    time_ago_in_words_label(@story.unavailable_at) %>, cached text
+    available</a>
+    <div id="collapsed_story_text">
+      <p>
+      <em>All story content copyright of its respective owner.</em>
+      </p>
+
+      <div class="story_text">
+        <blockquote>
+          <%= simple_format(@story.story_cache) %>
+        </blockquote>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("story_text_expander").addEventListener("click",
+        function() {
+          document.getElementById("collapsed_story_text").style.display = "block";
+          return false;
+        });
+    </script>
+  <% end %>
+</div>
+
+<% if !@story.previewing %>
+  <ol class="comments comments1">
+    <% if !@story.is_gone? && !@story.previewing %>
+      <li><%= render "comments/commentbox", :comment => @comment %></li>
+    <% end %>
+
+    <% comments_by_parent = @comments.group_by(&:parent_comment_id) %>
+    <% subtree = comments_by_parent[nil] %>
+    <% ancestors = [] %>
+
+    <% while subtree %>
+      <% if (comment = subtree.shift) %>
+        <li>
+        <%= render "comments/comment", :comment => comment,
+          :show_story => (comment.story_id != @story.id),
+          :was_merged => (comment.story_id != @story.id) %>
+
+        <% if (children = comments_by_parent[comment.id]) %>
+          <% ancestors << subtree %>
+          <% subtree = children %>
+          <ol class="comments">
+        <% else %>
+          <ol class="comments"></ol></li>
+        <% end %>
+      <% elsif (subtree = ancestors.pop) %>
+        </ol></li>
+      <% end %>
+    <% end %>
+  </ol>
+<% end %>

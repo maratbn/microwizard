@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noarchive,noodp,noydir" />
+  <meta name="referrer" content="always" />
+  <meta name="theme-color" content="#AC130D" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <% if @short_url %>
+    <link rev="canonical" rel="self alternate shorter shorturl shortlink"
+      href="<%= @short_url %>" />
+  <% end %>
+  <title><%= @title.present? ? "#{@title} | " : "" %><%=
+    Rails.application.name %></title>
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <% if @user %>
+    <%= javascript_include_tag "application" %>
+    <script>
+      Lobsters.curUser = '<%= @user.id %>';
+    </script>
+  <% end %>
+  <%= csrf_meta_tags %>
+  <% if @rss_link %>
+    <link rel="alternate" type="application/rss+xml"
+      title="<%= @rss_link[:title] %>" href="<%= @rss_link[:href] %>" />
+  <% end %>
+  <% if @comments_rss_link %>
+    <link rel="alternate" type="application/rss+xml"
+      title="<%= @comments_rss_link[:title] %>"
+      href="<%= @comments_rss_link[:href] %>" />
+  <% end %>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="header">
+      <div id="headerleft">
+        <a id="l_holder" style="background-color: #<%= sprintf("%02x%02x%02x",
+        [ 255, (@traffic * 7).floor + 50.0 ].min, 0, 0) %>;" href="/"
+        title="<%= Rails.application.name %> (Current traffic: <%= @traffic.to_i %>)"></a>
+
+        <% links = {
+          "/" => @cur_url == "/" ? Rails.application.name : "Home",
+          "/recent" => "Recent",
+          "/comments" => "Comments",
+        } %>
+
+        <% if @user %>
+          <% links.merge!({ "/threads" => "Your Threads",
+            "/stories/new" => "Submit Story" }) %>
+        <% end %>
+
+        <% links.merge!({ "/search" => "Search" }) %>
+        <% links.merge!({ "/popular" => "Most Popular Users!"}) %>
+
+        <% if @cur_url.present? && !links.keys.include?(@cur_url) &&
+        @heading.present? %>
+          <span id="headertitle">
+            <a href="<%= @cur_url %>"><%= @heading %></a>
+          </span>
+        <% end %>
+
+        <span class="headerlinks">
+          <% links.each do |u,v| %>
+            <a href="<%= u %>" <%= u == @cur_url ? raw("class=\"cur_url\"") :
+              "" %>><%= v %></a>
+          <% end %>
+        </span>
+      </div>
+
+      <div id="headerright">
+        <span class="headerlinks">
+        <a href="/filters" <%= @cur_url == "/filters" ?
+          raw("class=\"cur_url\"") : "" %>>Filters</a>
+        <% if @user %>
+          <% if (count = @user.unread_message_count) > 0 %>
+            <a href="/messages" class="new_messages <%= @cur_url == "/messages" ?
+              "cur_url" : "" %>"><%= count %> New Message<%= count == 1 ? "" :
+              "s" %></a>
+          <% else %>
+            <a href="/messages" <%= @cur_url == "/messages" ?
+              raw("class=\"cur_url\"") : "" %>>Messages</a>
+          <% end %>
+
+          <a href="/settings" <%= @cur_url == "/settings" ?
+            raw("class=\"cur_url\"") : "" %>><%= @user.username %>
+            (<%= @user.karma %>)</a>
+
+          <%= link_to "Logout", { :controller => "login", :action => "logout" },
+            :data => { :confirm => "Are you sure you want to logout?" },
+            :method => "post" %>
+        <% else %>
+          <a href="/login">Login</a>
+        <% end %>
+        </span>
+      </div>
+
+      <div class="clear"></div>
+    </div>
+
+    <div id="inside">
+      <% [ :error, :success, :notice ].each do |f| %>
+        <% if flash[f].present? %>
+          <div class="flash-<%= f %>"><%= flash[f] %></div>
+        <% end %>
+      <% end %>
+
+      <%= yield %>
+
+      <div id="footer">
+        <a href="/moderations">Moderation Log</a>
+        <% if @user && !@user.is_new? &&
+        (iqc = InvitationRequest.verified_count) > 0 %>
+          <a href="/invitations">Invitation Queue (<%= iqc %>)</a>
+        <% end %>
+        <a href="/chat">Chat</a>
+        <% if defined?(BbsController) %>
+          <a href="/bbs">BBS</a>
+        <% end %>
+        <a href="/privacy">Privacy</a>
+        <a href="/about">About</a>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</body>
+</html>

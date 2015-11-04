@@ -1,0 +1,177 @@
+<li id="story_<%= story.short_id %>" data-shortid="<%= story.short_id %>"
+class="story <%= story.vote && story.vote[:vote] == 1 ? "upvoted" : "" %>
+<%= story.vote && story.vote[:vote] == -1 ? "downvoted" : "" %>
+<%= story.score <= -1 ? "negative_1" : "" %>
+<%= story.score <= -3 ? "negative_3" : "" %>
+<%= story.score <= -5 ? "negative_5" : "" %>
+<%= story.is_hidden_by_cur_user ? "hidden" : "" %>
+<%= story.is_expired? ? "expired" : "" %>">
+<div class="story_liner">
+  <div class="voters">
+    <% if @user %>
+      <a class="upvoter"></a>
+    <% else %>
+      <%= link_to "", login_path, :class => "upvoter" %>
+    <% end %>
+    <div class="score"><%= story.score %></div>
+  </div>
+  <div class="details">
+    <span class="link">
+      <% if story.can_be_seen_by_user?(@user) %>
+        <a href="<%= story.url_or_comments_path %>"><%=
+          break_long_words(story.title) %></a>
+      <% end %>
+      <% if story.is_gone? %>
+        [Story removed by <%= story.is_moderated? ? "moderator" :
+          "original submitter" %>]
+      <% end %>
+    </span>
+    <% if story.can_be_seen_by_user?(@user) %>
+      <span class="tags">
+        <% story.sorted_taggings.each do |tagging| %>
+          <a href="<%= tag_path(tagging.tag.tag) %>"
+            class="<%= tagging.tag.css_class %>"
+            title="<%= tagging.tag.description %>"><%= tagging.tag.tag %></a>
+        <% end %>
+      </span>
+      <% if story.domain.present? %>
+        <a class="domain" href="<%= story.domain_search_url %>"><%=
+          break_long_words(story.domain) %></a>
+      <% end %>
+
+      <% if defined?(single_story) && single_story %>
+        <% story.merged_stories.each do |ms| %>
+          <br>
+          <span class="merge"></span>
+          <span class="link">
+            <a href="<%= ms.url_or_comments_path %>"><%=
+              break_long_words(ms.title) %></a>
+          </span>
+          <span class="tags">
+            <% ms.sorted_taggings.each do |tagging| %>
+              <a href="<%= tag_path(tagging.tag.tag) %>"
+                class="<%= tagging.tag.css_class %>"
+                title="<%= tagging.tag.description %>"><%= tagging.tag.tag %></a>
+            <% end %>
+          </span>
+          <% if ms.domain.present? %>
+            <a class="domain" href="<%= ms.domain_search_url %>"><%=
+              break_long_words(ms.domain) %></a>
+          <% end %>
+          <span class="byline">
+            <% if @user && @user.show_avatars? %>
+              <a href="/u/<%= ms.user.username %>"><img
+                src="<%= ms.user.avatar_url(16) %>"
+                srcset="<%= ms.user.avatar_url(32) %> 32w" class="avatar"></a>
+            <% end %>
+
+            <% if story.user_is_author? %>
+              authored
+            <% end %>
+            by
+            <a href="/u/<%= ms.user.username %>" class="<%=
+              ms.html_class_for_user %>"><%= ms.user.username %></a>
+
+            <%= time_ago_in_words_label(ms.created_at, :strip_about => true) %>
+          </span>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if !(defined?(single_story) && single_story) && @user &&
+    @user.show_story_previews? %>
+      <% if (sc = story.description_or_story_cache(500)).present? %>
+        <div class="story_content">
+          <%= break_long_words(sc) %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="byline">
+      <% if @user && @user.show_avatars? %>
+        <a href="/u/<%= story.user.username %>"><img
+          src="<%= story.user.avatar_url(16) %>"
+          srcset="<%= story.user.avatar_url(32) %> 32w" class="avatar"></a>
+      <% end %>
+      <% if story.user_is_author? %>
+        authored
+      <% end %>
+      <% if story.previewing %>
+        by
+        <a class="<%= story.html_class_for_user %>"><%=
+          story.user.username %></a>
+        just now
+      <% else %>
+        by
+        <a href="/u/<%= story.user.username %>" class="<%=
+          story.html_class_for_user %>"><%= story.user.username %></a>
+
+        <%= time_ago_in_words_label(story.created_at, :strip_about => true) %>
+
+        <% if story.is_editable_by_user?(@user) %>
+          |
+          <a href="<%= edit_story_path(story.short_id) %>">edit</a>
+
+          <% if story.is_gone? && story.is_undeletable_by_user?(@user) %>
+            |
+            <%= link_to "undelete", story_undelete_path(story.short_id),
+              :method => :post, :data => {
+              :confirm => "Are you sure you want to undelete this story?" } %>
+          <% elsif !story.is_gone? %>
+            |
+            <% if story.user_id != @user.try(:id) &&
+            @user.try(:is_moderator?) %>
+              <%= link_to "delete", story_path(story.short_id),
+                :method => :delete, :class => "mod_story_link" %>
+            <% else %>
+              <%= link_to "delete", story_path(story.short_id),
+                :method => :delete, :data => {
+                :confirm => "Are you sure you want to delete this story?" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if story.can_have_suggestions_from_user?(@user) %>
+          | <%= link_to "suggest", story_suggest_path(story.short_id),
+            :class => "suggester" %>
+        <% end %>
+        <% if !story.is_gone? && @user %>
+          <% if @user && story.vote && story.vote[:vote] == -1 %>
+            | <a class="flagger">unflag (<%=
+              Vote::STORY_REASONS[story.vote[:reason]].to_s.downcase %>)</a>
+          <% elsif @user && @user.can_downvote?(story) %>
+            | <a class="flagger">flag</a>
+          <% end %>
+          <% if story.is_hidden_by_cur_user %>
+            | <%= link_to "unhide", story_unhide_path(story.short_id),
+              :class => "hider" %>
+          <% else %>
+            | <%= link_to "hide", story_hide_path(story.short_id),
+              :class => "hider" %>
+          <% end %>
+          <% if defined?(single_story) && single_story && story.hider_count > 0 %>
+            (hidden by <%= pluralize(story.hider_count, "user") %>)
+          <% end %>
+        <% end %>
+        <% if !story.is_gone? && (@user || story.comments_count > 0) %>
+          <span class="comments_label">
+            |
+            <a href="<%= story.comments_path %>"><%= story.comments_count == 0 ?
+              "discuss" : "#{story.comments_count} comment" <<
+              (story.comments_count == 1 ? "" : "s") %></a>
+          </span>
+        <% end %>
+
+        <% if defined?(single_story) && single_story &&
+        ((story.downvotes > 0 && @user && @user.is_moderator?) ||
+        (story.downvotes >= 3 || story.score <= 0)) %>
+          | <%= story.vote_summary_for(@user).downcase %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="mobile_comments <%= story.comments_count == 0 ? "zero" : "" %>"
+style="display: none;">
+  <a href="<%= story.comments_path %>"><%= story.comments_count %></a>
+</div>
+</li>

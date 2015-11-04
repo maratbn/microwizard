@@ -1,0 +1,26 @@
+
+<% @threads.each do |thread| %>
+<ol class="comments comments1">
+  <% comments_by_parent = thread.group_by(&:parent_comment_id) %>
+  <% subtree = comments_by_parent[nil] %>
+  <% ancestors = [] %>
+
+  <% while subtree %>
+    <% if (comment = subtree.shift) %>
+      <li>
+      <%= render "comments/comment", :comment => comment,
+        :show_story => ancestors.empty? %>
+
+      <% if (children = comments_by_parent[comment.id]) %>
+        <% ancestors << subtree %>
+        <% subtree = children %>
+        <ol class="comments">
+      <% else %>
+        <ol class="comments"></ol></li>
+      <% end %>
+    <% elsif (subtree = ancestors.pop) %>
+      </ol></li>
+    <% end %>
+  <% end %>
+</ol>
+<% end %>
