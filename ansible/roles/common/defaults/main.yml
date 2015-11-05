@@ -21,5 +21,6 @@ additional_system_packages: []
 
 essential_python_packages:
   - docker-py
+  - docopt
 
 additional_python_packages: []
