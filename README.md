@@ -30,14 +30,14 @@ You'll notice that once you reach that web page there is a link at the top "Most
 
 # Fun Part #
 
-1. Open up src/lobsters-popularity/popularity.py. This is a very simple program that will act as a microservice in our environment. Notice that it starts a simple little webserver and exposes two URLs. One URL is /health and this is where healthchecks will be sent. The other URL is / and it provides the meat of the service by querying the MySQL DB for the most popular users (as determined by Karma)
+1. Open up src/lobsters-popularity/popularity.py. This is a very simple program that will act as a microservice in our environment. Notice that it starts a simple little web server and exposes two URLs. One URL is /health and this is where healthchecks will be sent. The other URL is / and it provides the meat of the service by querying the MySQL DB for the most popular users (as determined by Karma)
 
 2. In the base deployment of the MicroWizard example you'll notice that if you go to http://localhost:3000/popular then no users will be displayed and a string like "NO SERVICES AVAILABLE" will be shown. This is because in the base deployment no services are deployed.
 
 3. Let's deploy a service. The lobsters-popularity service project comes with two Git committed files that are ready to use for this demo. Let's deploy a couple of the healthy services into the environment, run the following commands:
 
-`./add_service.sh 149d2b0147b6f95cdb3234dc0922842acb911a79`
-`./add_service.sh 149d2b0147b6f95cdb3234dc0922842acb911a79`
+`./scripts/svrun lobpop_v1 149d2b0147b6f95cdb3234dc0922842acb911a79`
+`./scripts/svrun lobpop_v1 149d2b0147b6f95cdb3234dc0922842acb911a79`
 
 The `149d2b0147b6f95cdb3234dc0922842acb911a79` part is a git commit hash. MicroWizard works by deploying Git repositories and using a specific hash. The first time you run the command it may take a moment as the container image for lobsters-popularity is built.
 
@@ -45,13 +45,9 @@ The `149d2b0147b6f95cdb3234dc0922842acb911a79` part is a git commit hash. MicroW
 
 5. Let's deploy a slightly broken service. The broken service runs very slowly in comparison to the previous two ones. It can be deployed by using the following command:
 
-`./add_service.sh 3c35bc4587fb266f30e08de67eec709f7fd6f365`
+`./scripts/svrun lobpop_v2 3c35bc4587fb266f30e08de67eec709f7fd6f365`
 
 6. Once it is up and running refresh the http://localhost:3000/popular page and you should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service, hoever, even though the service is operating slowly it is not causing the rest of the application to grind to a halt!
-
-
-
-If you're comfortable working inside a VM we also provide a Vagrant template that can setup a working environment.
 
 # Quick Start #
 
