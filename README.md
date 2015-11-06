@@ -117,11 +117,11 @@ How to use the microservice from inside their dev and production environments
 
 # How it works #
 
-How what the developer just did works.
-
-* Baker Street!
-* Btw did we mention that ChaosMonkey (or equivalent) was running in the background and killing the Popularity Service
-and stuff just continued to work?
+1. Microservice code is committed into a Git repository.
+2. When a new service is launched then MicroWizard performs a checkout against the specified Git commit. The checked out code is moved into a directory specifically for that commit. MicroWizard then launches a container and mounts the source code as a volume on the container.
+3. The container starts and runs some initialization logic (see docker/images/lobsters-popularity/init directory).
+4. The container then starts the service process.
+5. Sherlock and Watson are automatically instalelled on the container so when the service starts it automatically registers with the Datawire directory.
 
 # FAQ #
 
