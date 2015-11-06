@@ -2,5 +2,7 @@
 .directory
 .vagrant
 
-docker/base/Dockerfile
-docker/base/Dockerfile.j2
+docker/images/base/Dockerfile
+docker/images/base/Dockerfile.j2
+docker/data
+/data

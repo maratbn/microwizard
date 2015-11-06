@@ -6,10 +6,10 @@
 # ------------------------------------------------------------------------------
 
 # Location on the host where MicroWizard will resolve Docker image builds
-microwizard_docker_images: /microwizard/docker/images
+microwizard_docker_images: /vagrant/docker/images
 
-# Local on the host where MicroWizard will store Docker data volumes
-microwizard_docker_volumes: /microwizard/data
+# Location on the host where MicroWizard will store Docker data volumes
+microwizard_docker_volumes: /tmp/docker/data
 
 # Location on the host where MicroWizard will resolve sources
-microwizard_sources: /microwizard/src
+microwizard_sources: /vagrant/src

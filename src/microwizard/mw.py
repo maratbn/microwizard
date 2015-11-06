@@ -5,8 +5,8 @@
 Container tracker for MicroWizard.
 
 Usage:
-  mw add <name> <commit> <tag>
-  mw remove <name>
+  mw add <tag> <container>
+  mw remove <tag>
   mw generate-name
   mw -h | --help
   mw --version
@@ -26,20 +26,24 @@ import time
 from docopt import docopt
 
 def add_container(args, state):
-    state['index'] += 1
-    trimmed_commit = args['<commit>'][:8]
+    tag = args['<tag>']
+    container = args['<container>']
 
-    container_name = "{}_{}_{}".format(args['<name>'], trimmed_commit, state['index'])
-    if args['<name>'] not in state['containers']:
-        state['containers'][args['<name>']] = []
+    if tag not in state['containers']:
+        state['containers'][tag] = []
 
-    state['containers'][args['<name>']].append(container_name)
+    state['containers'][tag].append(container)
 
 def remove_container(args, state):
-    pass
+    tag = args['<tag>']
+
+    if tag not in state['containers']:
+        return
+
+    state['containers'][tag].pop()
 
 def initialize_state(path):
-    state = {"index": 0, "containers": {}}
+    state = {"index": 0, "container": {}}
     write_state(state, path)
 
 def load_state(path='/etc/datawire/mw_containers.json'):

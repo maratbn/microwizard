@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/bash -eux
 
-GIT_COMMIT=$1
+NAME=$1
 
 ansible-playbook\
  -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory\
- --extra-vars "git_commit=${GIT_COMMIT}"\
-  ansible/service.yml
+ --extra-vars "tag=${NAME}"\
+  ansible/remove_service.yml

@@ -5,6 +5,9 @@
   file:
     path: "{{ microwizard_docker_volumes }}/{{ db_name }}"
     state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0777
   tags:
     - infrastructure
     - mariadb

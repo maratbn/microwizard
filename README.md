@@ -14,9 +14,24 @@ The MicroWizard base system runs inside of a VirtualBox VM. We provision the VM 
 | Vagrant  | >=1.7.4 | [Install](https://docs.vagrantup.com/v2/installation/index.html) |
 | VirtualBox | >= 5.0 | [Install](https://www.virtualbox.org/wiki/Downloads) |
 
-# Getting Started (VM) #
+# Getting Started #
 
-MicroWizard bootstraps inside of a VM. To 
+MicroWizard bootstraps inside of a VM. To start the VM just run the following command in your terminal:
+
+`vagrant up`
+
+The bootstrapping process takes a few minutes so it's a perfect time to grab a cup of coffee or go bother one of your co-workers :)
+
+# Checking the Environment #
+
+Once the system is bootstrapped you should be able to access the Lobsters application by navigating a web browser to http://localhost:3000 which for the purpose of this little example tool represents our "Monolith" application that we will glue microservice functionality onto.
+
+You'll notice that once you reach that web page there is a link at the top "Most Popular Users" that is not normally present in a standard Lobsters install. This link has been created for you and will generate a web page that has data populated from a web service.
+
+# Fun Part #
+
+1. Open up src/lobsters-popularity/popularity.py. This is a very simple program that will act as a microservice in our environment. Notice that it starts a simple little webserver and exposes two URLs. One URL is /health and this is where healthchecks will be sent. The other URL is / and it provides the meat of the service by querying the MySQL DB for the most popular users (as determined by Karma!)
+
 
 If you're comfortable working inside a VM we also provide a Vagrant template that can setup a working environment.
 

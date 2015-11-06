@@ -1,6 +1,7 @@
 <h2>The Most Popular Users (by Karma!)</h2>
 
-<p>Service ID: <%= @service_id %> - <%= @service_status %></p>
+<p><strong>Service ID:</strong> <%= @service_id %> <%= @service_status %></p>
+<p><strong>Query Speed:</strong> <%= @query_time %>ms</p>
 <ol class="stories list <%= @cur_url == "/hidden" ? "show_hidden" : "" %>">
     <% @users.each do |u| %><li><%= u['username'] %> - <%= u['karma'] %></li><% end %>
 </ol>

@@ -206,26 +206,32 @@ class HomeController < ApplicationController
     @heading = @title = "Most Popular Users"
     @cur_url = "/popular"
 
-    #@users = ["foo", "bar", "baz"]
-
+    t1 = Time.now
     url = URI.parse('http://localhost:8000/lobsters-popularity')
     #res = Net::HTTP.get(URI.parse('http://localhost:8000/lobsters-popularity'))
     #req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port) { |http|
       http.get("/lobsters-popularity")
     }
+    t2 = Time.now
 
     if res.code == "200"
       data = JSON.parse(res.body)
       @users = data['users']
       @service_id = data['service_id']
+      @query_time = time_diff_milli t1, t2
     else
       @service_id = "NO SERVICES AVAILABLE"
-      @users = JSON.parse('[{"username": "foo", "karma": 300}, {"username": "nar", "karma": "200"}]')
+      @users = JSON.parse('[]')
+      @query_time = 0
     end
 
     respond_to do |format|
       format.html { render :action => "most_popular" }
+    end
+
+    def time_diff_milli(start, finish)
+      (finish - start) * 1000.0
     end
   end
 
