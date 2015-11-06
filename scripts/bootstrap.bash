@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-sudo cp /tmp/docker.repo /etc/yum.repos.d/docker.repo
+sudo cp /vagrant/files/docker.repo /etc/yum.repos.d/docker.repo
 sudo chown root:root /etc/yum.repos.d/docker.repo
 sudo chmod 0644 /etc/yum.repos.d/docker.repo
 
