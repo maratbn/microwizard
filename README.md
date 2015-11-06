@@ -16,6 +16,10 @@ The MicroWizard base system runs inside of a VirtualBox VM. We provision the VM 
 
 # Getting Started #
 
+Clone this repository. The recommended way to do this is using `git clone` with the `--recursive` flag because there are some Git submodules linked into this repo:
+
+`git clone --recursive git@github.com:datawire/microwizard.git`
+
 MicroWizard bootstraps inside of a VM. To start the VM just run the following command in your terminal:
 
 `vagrant up`
