@@ -40,7 +40,11 @@ def remove_container(args, state):
     if tag not in state['containers']:
         return
 
-    return state['containers'][tag].pop()
+    container_name = None
+    if len(state['containers'][tag]) > 0:
+        container_name = state['containers'][tag].pop()
+
+    return container_name
 
 def initialize_state(path):
     state = {"index": 0, "containers": {}}
