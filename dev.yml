@@ -1,8 +1,0 @@
----
-# file: config.yml
-
-services:
-  - name: lobster
-    src: src/lobster
-  - name: lobster-pop
-    src: src/lobster-pop
