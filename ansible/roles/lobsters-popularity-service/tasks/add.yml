@@ -64,4 +64,4 @@
     - lobsters_popularity
 
 - name: add the container to microwizards tracking set
-  command: "python {{ microwizard_sources }}/microwizard/mw.py add lobsters-pop {{ lobsters_popularity_container_name.stdout }}"
+  command: "python {{ microwizard_sources }}/microwizard/mw.py add {{ tag }} {{ lobsters_popularity_container_name.stdout }}"

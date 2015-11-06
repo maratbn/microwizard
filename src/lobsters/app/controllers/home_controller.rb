@@ -215,6 +215,10 @@ class HomeController < ApplicationController
     }
     t2 = Time.now
 
+    def time_diff_milli(start, finish)
+      (finish - start) * 1000.0
+    end
+
     if res.code == "200"
       data = JSON.parse(res.body)
       @users = data['users']
@@ -228,10 +232,6 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       format.html { render :action => "most_popular" }
-    end
-
-    def time_diff_milli(start, finish)
-      (finish - start) * 1000.0
     end
   end
 

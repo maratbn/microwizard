@@ -1,0 +1,27 @@
+#!/bin/bash -eux
+
+# ----------------------------------------------------------------------------------------------------------------------
+# svkill
+#
+# Kills a running service on the MicroWizard host.
+#
+# Usage:
+#   svkill <tag>
+#
+
+tag=$1
+
+if [ ${#tag} -lt 3 ]; then
+  echo "error: tag is too short (expected: 3 or more chars)"
+  exit 1
+fi
+
+if [ ! -d ".vagrant/" ]; then
+  echo "error: .vagrant directory does not exist. run 'vagrant up' to provision the VM and create this directory"
+  exit 1
+fi
+
+ansible-playbook\
+  -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory\
+  --extra-vars "tag=${tag}"\
+  ansible/remove_service.yml

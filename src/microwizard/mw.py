@@ -40,10 +40,10 @@ def remove_container(args, state):
     if tag not in state['containers']:
         return
 
-    state['containers'][tag].pop()
+    return state['containers'][tag].pop()
 
 def initialize_state(path):
-    state = {"index": 0, "container": {}}
+    state = {"index": 0, "containers": {}}
     write_state(state, path)
 
 def load_state(path='/etc/datawire/mw_containers.json'):
@@ -83,7 +83,7 @@ def mwc(args):
         write_state(state)
 
     if args['remove']:
-        remove_container(args, state)
+        print remove_container(args, state)
         write_state(state)
 
     if args['generate-name']:
