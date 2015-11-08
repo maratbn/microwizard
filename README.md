@@ -19,25 +19,25 @@ The Microwizard base system runs inside of a VirtualBox VM. We provision the VM 
 
 # Quick Start #
 
-#. Clone the Playground project on GitHub, as well as some of the Git submodules linked into this repository: 
+1. Clone the Playground project on GitHub, as well as some of the Git submodules linked into this repository: 
 
 `git clone --recursive git@github.com:datawire/microwizard.git`
 
-#. Run `vagrant up`. This will take a few minutes as the Microwizard bootstraps inside the VM.
+2. Run `vagrant up`. This will take a few minutes as the Microwizard bootstraps inside the VM.
 
-#. Run `install.sh`, which will prepopulate the system with some test data.
+3. Run `install.sh`, which will prepopulate the system with some test data.
    
-#. Go to http://localhost:3000/ to see the Lobster webapp running.
+4. Go to http://localhost:3000/ to see the Lobster webapp running.
 
 Now the fun part:
 
-#. We introduce a bug in the popularity component, e.g., the
+5. We introduce a bug in the popularity component, e.g., the
 popularity algorithm takes 1000 longer to compute. We make the change
 live.
   - Notice how the website still works even though the popularity calc doesn't appear for awhile
   - If this were in the monolith the monolith would grind to a halt
 
-#. Fix the code, and do an incremental rollout of the code.
+6. Fix the code, and do an incremental rollout of the code.
    - Make sure no regressions, you can see for 50% of the loads it's pretty fast and for the other 50% it's not
 
 
