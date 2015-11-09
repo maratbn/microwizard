@@ -3,6 +3,7 @@
 
 lobsters_image_version: dev
 lobsters_rails_env: production
+lobsters_secret_key_base: notasecret
 
 lobster_domain: example.com
 lobster_name: Example News

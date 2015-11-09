@@ -41,6 +41,8 @@
       dockerhost: 192.168.22.10 # needs to be made dynamic
       routable_address: 192.168.22.10
       mapped_port: 3000
+      RAILS_ENV: "{{ lobsters_rails_env }}"
+      SECRET_KEY_BASE: "{{ lobsters_secret_key_base }}"
     ports:
       - 3000:3000
     volumes:
