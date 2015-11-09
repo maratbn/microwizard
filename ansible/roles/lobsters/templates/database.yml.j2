@@ -1,3 +1,14 @@
+production:
+  adapter: mysql2
+  encoding: utf8mb4
+  reconnect: false
+  host: <%= ENV['DB_PORT_3306_TCP_ADDR'] %>
+  port: <%= ENV['DB_PORT_3306_TCP_PORT'] %>
+  pool: {{ lobster_db_connection_pool_size }}
+  database: {{ lobster_db_name }}
+  username: {{ lobster_db_user }}
+  password: {{ lobster_db_password }}
+
 development:
   adapter: mysql2
   encoding: utf8mb4

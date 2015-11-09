@@ -2,6 +2,7 @@
 # file: roles/lobster/defaults/main.yml
 
 lobsters_image_version: dev
+lobsters_rails_env: production
 
 lobster_domain: example.com
 lobster_name: Example News
