@@ -24,8 +24,6 @@ The Microwizard base system runs inside of a VirtualBox VM. We provision the VM 
 `git clone --recursive git@github.com:datawire/microwizard.git`
 
 2. Run `vagrant up`. This will take a few minutes as the Microwizard bootstraps inside the VM.
-
-3. Run `install.sh`, which will prepopulate the system with some test data.
    
 4. Go to http://localhost:3000/ to see the Lobster webapp running.
 
