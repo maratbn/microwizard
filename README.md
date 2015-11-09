@@ -112,7 +112,7 @@ How to use the microservice from inside their dev and production environments
 2. When a new service is launched then Microwizard performs a checkout against the specified Git commit. The checked out code is moved into a directory specifically for that commit. Microwizard then launches a container and mounts the source code as a volume on the container.
 3. The container starts and runs some initialization logic (see docker/images/lobsters-popularity/init directory).
 4. The container then starts the service process.
-5. Sherlock and Watson are automatically instalelled on the container so when the service starts it automatically registers with the Datawire directory.
+5. Sherlock and Watson are automatically installed on the container so when the service starts it automatically registers with the Datawire directory.
 
 # FAQ #
 
