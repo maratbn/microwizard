@@ -59,16 +59,17 @@ You'll notice that once you reach that web page there is a link at the top "Most
 
 3. Let's deploy a service. The lobsters-popularity service project comes with two Git committed files that are ready to use for this demo. Let's deploy a couple of the healthy services into the environment, run the following commands:
 
-`./scripts/svrun lobpop_v1 149d2b0147b6f95cdb3234dc0922842acb911a79`
-`./scripts/svrun lobpop_v1 149d2b0147b6f95cdb3234dc0922842acb911a79`
+`./scripts/svrun lobpop_v1 149d2b01`
 
-The `149d2b0147b6f95cdb3234dc0922842acb911a79` part is a git commit hash. Microwizard works by deploying Git repositories and using a specific hash. The first time you run the command it may take a moment as the container image for lobsters-popularity is built.
+`./scripts/svrun lobpop_v1 149d2b01`
+
+The `149d2b019` part is a git commit hash. Microwizard works by deploying Git repositories and using a specific hash. The first time you run the command it may take a moment as the container image for lobsters-popularity is built.
 
 4. Once the containers are deployed go back to http://localhost:3000/popular and you should see some data on the page. Some other statistical information is displayed like the query speed and which service handled the request.
 
 5. Let's deploy a slightly broken service. The broken service runs very slowly in comparison to the previous two ones. It can be deployed by using the following command:
 
-`./scripts/svrun lobpop_v2 3c35bc4587fb266f30e08de67eec709f7fd6f365`
+`./scripts/svrun lobpop_v2 3c35bc45`
 
 6. Once it is up and running refresh the http://localhost:3000/popular page and you should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service, hoever, even though the service is operating slowly it is not causing the rest of the application to grind to a halt!
 
