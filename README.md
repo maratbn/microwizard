@@ -115,5 +115,13 @@ How to use the microservice from inside their dev and production environments
 4. The container then starts the service process.
 5. Sherlock and Watson are automatically installed on the container so when the service starts it automatically registers with the Datawire directory.
 
+# Architecture Overview and Issues #
+
+First and foremost it is important to understand that this was built as a demo. Certain architectural choices were made that would likely not be OK in a true production microservices environment. These decisions were made because the premise of the demo was to show people how they could get started with microservices rather than to provide a true generic reference architecture.
+
+All the services in the architecture were designed to run inside of a container. For the most part we have hidden the container image build process away from the developer in this demo. During the initial provisioning process we build a base Docker image that contains Datawire components such as Watson and Sherlock (/docker/images/base). Developers for convenience are expected to base their service images off this particular image rather than generating their own, however, it is not a hard requirement to do that.
+
+One of the bigger flaws in the design right now is that in order to properly map service addresses into the Datawire directory we need to mount the host controller Docker process as a volume onto each service. This allows us to then query the ephemeral port assigned by Docker to the service so that we can properly map the address into the Directory. The major problem with this approach is that individual containers then have read/write access to the entire Docker environment which is likely not desireable. A more robust solution would be to maintain our own mapping of ports which we then tell Docker about when running a new container. Another approach would be to run a process on the host machine that can query the API for containers.
+
 # FAQ #
 
