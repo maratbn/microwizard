@@ -22,19 +22,10 @@
   tags:
     - lobsters
 
-- name: build the lobster image
-  docker_image:
-    name: microwizard/lobsters
-    nocache: no
-    path: "{{ microwizard_docker_images }}/lobsters"
-    state: build
-  tags:
-    - lobsters_base
-
 - name: start the lobsters container
   docker:
     name: lobsters
-    image: microwizard/lobsters
+    image: microwizard/generic-service
     env:
       container_name: lobsters
       exposed_port: 3000
@@ -43,14 +34,13 @@
       mapped_port: 3000
       RAILS_ENV: "{{ lobsters_rails_env }}"
       SECRET_KEY_BASE: "{{ lobsters_secret_key_base }}"
-    ports:
-      - 3000:3000
+    expose:
+      - "{{ exposed_port }}"
+    ports: "{{ service_ports }}"
     volumes:
-      - "{{ microwizard_sources }}/lobsters:/usr/src/lobsters"
+      - "{{ microwizard_sources }}/lobsters:/usr/src/service"
       - "/var/run/docker.sock:/var/run/docker.sock"
-    links:
-      - "{{ lobster_db_name }}-db:db"
-      - "directory:directory"
-    state: restarted
+    links: "{{ service_links }}"
+    state: started
   tags:
     - lobsters

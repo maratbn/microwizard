@@ -1,5 +1,2 @@
 ---
 # file: roles/datawire-directory/meta/main.yml
-
-dependencies:
-  - role: common

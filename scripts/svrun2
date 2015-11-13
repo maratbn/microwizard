@@ -1,13 +1,18 @@
 #!/bin/bash -e
 
 # ----------------------------------------------------------------------------------------------------------------------
-# svrun2
+# svrun
 #
 # Runs a new service on the MicroWizard host. The Git commit is optional and if not provided then the UNCOMMITTED
 # changes will be used. This is handy for development.
 #
 # Usage:
-#   svrun2 <service_name> <tag> [git_commit]
+#   svrun <service_name> <tag> [git_commit]
+#
+# Options:
+#   git_commit    a git hash or one of (UNCOMMITTED, UNCOMMITTED_COPY). UNCOMMITTED means the source directory will be
+#                 mounted as a docker volume onto the container. UNCOMMITTED_COPY means the source directory will be
+#                 copied (based on <tag>) before being mounted.
 #
 
 service_name=$1

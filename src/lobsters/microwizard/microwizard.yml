@@ -1,0 +1,8 @@
+---
+service_name: lobsters
+exposed_port: 3000
+service_ports:
+  - "0.0.0.0:3000:3000"
+service_links:
+  - directory:directory
+  - lobsters-db:db
