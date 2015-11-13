@@ -1,16 +1,24 @@
 #!/bin/bash -e
 
 # ----------------------------------------------------------------------------------------------------------------------
-# svlaunch
+# svrun
 #
-# Runs a new service on the MicroWizard host.
+# Runs a new service on the MicroWizard host. The Git commit is optional and if not provided then the UNCOMMITTED
+# changes will be used. This is handy for development.
 #
 # Usage:
-#   svlaunch <tag> <git_commit>
+#   svrun <service_name> <tag> [git_commit]
+#
+# Options:
+#   git_commit    a git hash or one of (UNCOMMITTED, UNCOMMITTED_COPY). UNCOMMITTED means the source directory will be
+#                 mounted as a docker volume onto the container. UNCOMMITTED_COPY means the source directory will be
+#                 copied (based on <tag>) before being mounted.
 #
 
-tag=$1
-git_commit=$2
+service_name=$1
+service_path="$(pwd)/src/${service_name}"
+tag=$2
+git_commit=${3:-UNCOMMITTED}
 
 if [ ${#git_commit} -lt 8 ]; then
   echo "error: git commit hash is too short (expected: 8 or more chars)"
@@ -22,12 +30,24 @@ if [ ${#tag} -lt 3 ]; then
   exit 1
 fi
 
+if [ ! -d "src/${service_name}" ]; then
+  echo "error: src/${service_name} directory does not exist."
+  exit 1
+fi
+
 if [ ! -d ".vagrant/" ]; then
   echo "error: .vagrant directory does not exist. run 'vagrant up' to provision the VM and create this directory"
   exit 1
 fi
 
+echo "---> provisioning service... (name: ${service_name})"
 ansible-playbook\
   -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory\
-  --extra-vars "tag=${tag} git_commit=${git_commit}"\
-  ansible/add_service.yml
+  -u vagrant\
+  --extra-vars\
+    "service_path=${service_path}\
+     service_name=${service_name}\
+     tag=${tag}\
+     git_commit=${git_commit}\
+    "\
+  provisioning/add_service.yml
