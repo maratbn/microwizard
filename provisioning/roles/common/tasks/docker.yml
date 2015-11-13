@@ -1,0 +1,51 @@
+---
+# file: common/tasks/docker.yml
+
+- name: ensure docker repo is installed
+  copy:
+    src: docker.repo
+    dest: /etc/yum.repos.d/docker.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure docker-engine is installed
+  yum:
+    name: docker-engine
+    state: latest
+
+- name: ensure users are added to the docker group
+  user:
+    append: yes
+    groups: docker
+    name: "{{ item }}"
+    state: present
+  with_items: docker_users
+
+- name: ensure docker0 interface is in trusted zone
+  command: firewall-cmd --permanent --zone=trusted --change-interface=docker0
+  tags:
+    - firewall
+
+- name: ensure docker API is available from containers
+  firewalld:
+    immediate: yes
+    permanent: yes
+    port: 4243/tcp
+    state: enabled
+    zone: trusted
+  tags:
+    - firewall
+
+- name: ensure a directory exists for containing docker volumes
+  file:
+    path: "{{ microwizard_docker_volumes }}"
+    state: directory
+  tags:
+    - common
+
+- name: ensure docker is started and enabled to start on boot
+  service:
+    name: docker
+    enabled: yes
+    state: started

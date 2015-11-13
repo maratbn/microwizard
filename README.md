@@ -123,5 +123,15 @@ All the services in the architecture were designed to run inside of a container.
 
 One of the bigger flaws in the design right now is that in order to properly map service addresses into the Datawire directory we need to mount the host controller Docker process as a volume onto each service. This allows us to then query the ephemeral port assigned by Docker to the service so that we can properly map the address into the Directory. The major problem with this approach is that individual containers then have read/write access to the entire Docker environment which is likely not desireable. A more robust solution would be to maintain our own mapping of ports which we then tell Docker about when running a new container. Another approach would be to run a process on the host machine that can query the API for containers.
 
+1. Dynamically resolved and provisioned service dependencies.
+
+# Implementing Custom Microservices #
+
+Implementing a custom microservice is really simple. The provisioning system baked with MicroWizard means you only need to concentrate on application/service code and can forget about deployment and wiring.
+
+1. Copy the template microservice
+2. Modify the template microwizard.yml file with your service name, exposed port and necessary links
+3. Modify the mw.sh script and update the init and run functions as necessary.
+
 # FAQ #
 

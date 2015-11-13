@@ -1,7 +1,7 @@
 ---
 # file: roles/datawire-directory/tasks/main.yml
 
-- name: create datawire directory data directory
+- name: ensure datawire directory data directory is created
   file:
     path: "{{ microwizard_docker_volumes }}/datawire"
     state: directory
@@ -9,27 +9,19 @@
     - datawire-directory
     - infrastructure
 
-- name: pull datawire directory image
-  command: docker pull quay.io/datawire/directory:{{ dw_directory_image_version }}
-  tags:
-    - datawire-directory
-    - infrastructure
-
-- name: retag datawire directory image
-  command: docker tag -f quay.io/datawire/directory:{{ dw_directory_image_version }} directory
-
 - name: start datawire directory container
   docker:
-    command: "/bin/bash -c '/usr/bin/directory -n $(hostname -i) -p 5672 -l DEBUG'"
-    image: microwizard/base
-    name: directory
+    command: "/bin/bash -c '/usr/bin/directory -n $(hostname -i) -p 5672'"
     env:
       container_name: directory
       exposed_port: 5672
     expose:
       - 5672
+    image: microwizard/base
+    name: directory
     pull: missing
-    registry: quay.io
+    restart_policy: on-failure
+    restart_policy_retry: 3
     state: restarted
     volumes:
       - "{{ microwizard_docker_volumes }}/datawire:/etc/datawire"

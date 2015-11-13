@@ -1,0 +1,7 @@
+---
+- hosts: all
+  sudo: yes
+  pre_tasks:
+    - include_vars: "{{ service_path }}/microwizard/microwizard.yml"
+  roles:
+    - role: microservice

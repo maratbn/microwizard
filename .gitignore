@@ -2,7 +2,6 @@
 .directory
 .vagrant
 
-docker/images/base/Dockerfile
-docker/images/base/Dockerfile.j2
+docker/images/base/datawire-repository
 docker/data
 /data

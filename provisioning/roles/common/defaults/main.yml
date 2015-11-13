@@ -12,15 +12,18 @@ datawire_repository_url: https://packagecloud.io/install/repositories/datawire/{
 # ------------------------------------------------------------------------------
 essential_system_packages:
   - curl
-  - docker-engine
+  - gcc
   - git
   - python-pip
   - python-devel
-
-additional_system_packages: []
 
 essential_python_packages:
   - docker-py
   - docopt
 
-additional_python_packages: []
+# ------------------------------------------------------------------------------
+# Docker Configuration
+# ------------------------------------------------------------------------------
+
+docker_users:
+  - vagrant

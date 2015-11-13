@@ -1,8 +1,0 @@
----
-- hosts: all
-  remote_user: vagrant
-  sudo: yes
-  roles:
-    - role: lobsters-popularity-service
-      state: absent
-      tag: "{{ tag }}"

@@ -24,4 +24,4 @@ fi
 ansible-playbook\
   -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory\
   --extra-vars "tag=${tag}"\
-  ansible/remove_service.yml
+  provisioning/remove_service.yml

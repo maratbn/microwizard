@@ -1,0 +1,36 @@
+---
+# file: roles/common/tasks/main.yml
+
+- name: ensure centos is updated
+  yum:
+    name: "*"
+    state: latest
+  tags:
+    - common
+
+- name: ensure essential packages are installed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: essential_system_packages
+  tags:
+    - common
+
+- name: ensure essential python packages are installed
+  pip:
+    name: "{{ item }}"
+  with_items: essential_python_packages
+  tags:
+    - common
+
+- name: ensure firewalld is running
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
+  tags:
+    - firewall
+
+- include: docker.yml
+- include: docker_base_image.yml
+- include: docker_service_image.yml

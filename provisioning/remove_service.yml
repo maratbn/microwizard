@@ -1,0 +1,12 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: remove a container registered with microwizard
+      command: python {{ microwizard_sources }}/microwizard/mw.py remove {{ tag }}
+      register: container_name
+    - name: stop and remove the container
+      docker:
+        name: "{{ container_name.stdout }}"
+        image: microwizard/generic
+        state: absent

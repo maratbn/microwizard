@@ -1,0 +1,16 @@
+---
+# file: roles/common/tasks/docker_service_image.yml
+
+- name: build the generic service image
+  docker_image:
+    name: microwizard/generic-service
+    nocache: no
+    path: "{{ microwizard_docker_images }}/generic"
+    state: present
+  notify:
+    - list untagged images
+    - show untagged images
+    - remove untagged images
+  tags:
+    - common
+    - base

@@ -1,10 +1,10 @@
 ---
-# file: roles/common/tasks/base_image.yml
+# file: roles/common/tasks/docker_base_image.yml
 
-- name: ensure base image dockerfile is configured
+- name: ensure datawire repository information is present before image build
   template:
-    dest: "{{ microwizard_docker_images }}/base/Dockerfile"
-    src: base_Dockerfile.j2
+    dest: "{{ microwizard_docker_images }}/base/datawire-repository"
+    src: datawire-repository.j2
   tags:
     - common
     - base
@@ -14,7 +14,7 @@
     name: microwizard/base
     nocache: no
     path: "{{ microwizard_docker_images }}/base"
-    state: build
+    state: present
   notify:
     - list untagged images
     - show untagged images

@@ -1,0 +1,8 @@
+---
+- hosts: all
+  sudo: yes
+  roles:
+    - role: common
+      datawire_repository: staging
+    - role: datawire-directory
+    - role: lobsters

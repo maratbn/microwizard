@@ -20,11 +20,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
   end
 
-  config.vm.provision :shell,
-                      path: 'scripts/bootstrap.bash'
+  config.vm.provision :shell, path: 'provisioning/scripts/bootstrap.bash'
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = 'ansible/playbook.yml'
+    ansible.playbook = 'provisioning/microwizard.yml'
     ansible.extra_vars = {
       ansible_ssh_user: 'vagrant'
     }

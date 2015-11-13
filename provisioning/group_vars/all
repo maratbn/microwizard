@@ -11,5 +11,5 @@ microwizard_docker_images: /vagrant/docker/images
 # Location on the host where MicroWizard will store Docker data volumes
 microwizard_docker_volumes: /tmp/docker/data
 
-# Location on the host where MicroWizard will resolve sources
+# Location on the host where MicroWizard will resolve application sources
 microwizard_sources: /vagrant/src

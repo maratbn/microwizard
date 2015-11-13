@@ -1,0 +1,55 @@
+---
+- name: create the services volume directory
+  file:
+    path: /tmp/{{ service_name }}_{{ git_commit }}
+    state: directory
+  when: git_commit != "UNCOMMITTED"
+
+- name: checkout source tree
+  command: "git --work-tree=/tmp/service_{{ git_commit }} checkout {{ git_commit }} -- ."
+  args:
+    chdir: "{{ microwizard_sources }}/{{ service_name }}"
+  when: git_commit != "UNCOMMITTED"
+
+- name: generate a container name
+  command: "python {{ microwizard_sources }}/microwizard/mw.py generate-name"
+  register: container_name
+
+- name: start the container (committed changes)
+  docker:
+    name: "{{ container_name.stdout }}"
+    image: microwizard/generic-service
+    env:
+      container_name: "{{ container_name.stdout }}"
+      exposed_port: "{{ service_port }}"
+    expose:
+      - "{{ service_port }}"
+    ports:
+      - "{{ service_port }}"
+    volumes:
+      - "/tmp/{{ service_name }}_{{ git_commit }}:/usr/src/service"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    links: service_links
+    state: restarted
+  when: git_commit != "UNCOMMITTED"
+
+- name: start the container (uncommitted changes)
+  docker:
+    name: "{{ container_name.stdout }}"
+    image: microwizard/generic-service
+    env:
+      container_name: "{{ container_name.stdout }}"
+      exposed_port: "{{ service_port }}"
+    expose:
+      - "{{ service_port }}"
+    ports:
+      - "{{ service_port }}"
+    volumes:
+      - "{{ microwizard_sources }}/{{ service_name }}:/usr/src/service"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    links: "{{ service_links }}"
+    state: restarted
+  when: git_commit == "UNCOMMITTED"
+
+- name: add the container to microwizards tracking set
+  command: "python {{ microwizard_sources }}/microwizard/mw.py add {{ tag }} {{ container_name.stdout }}"
