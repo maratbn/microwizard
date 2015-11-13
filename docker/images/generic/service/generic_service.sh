@@ -13,5 +13,5 @@
 #
 # Runit documentation can be found here: http://smarden.org/runit/
 
-cd /usr/src/lobsters
-exec rails server
+MICROWIZARD_INIT_ROOT=/usr/src/service/microwizard
+bash ${MICROWIZARD_INIT_ROOT}/mw.sh run

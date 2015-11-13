@@ -3,7 +3,7 @@ MAINTAINER datawire.io <hello@datawire.io>
 
 COPY . /img_build
 
-RUN curl -s {{ datawire_repository_url }} | bash
+RUN curl -s $(cat /img_build/datawire-repository) | bash
 RUN apt-get install -y\
  datawire-directory\
  datawire-sherlock\

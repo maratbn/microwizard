@@ -19,7 +19,6 @@ datawire_config_file = '/etc/datawire/datawire.conf'
 
 def configure_for_docker(**kwargs):
     from docker import Client
-    from pprint import pprint
 
     """Configures Baker Street for a vanilla Docker deployment"""
 
@@ -33,14 +32,9 @@ def configure_for_docker(**kwargs):
     c_id = os.environ['container_name']
     c_info = docker_client.inspect_container(c_id)
     c_net = c_info['NetworkSettings']
-    # pprint(c_net)
-    # c_ports = c_net['Ports']
-    # port = '{}/tcp'.format(os.environ['exposed_port'])
-    # c_port_map = c_ports[port]
-    # c_port_mapped_to_exposed_port = c_port_map[0]['HostPort']
     c_container_address = c_net['IPAddress']
     template_vars = {'routable_address': os.getenv("routable_address", c_container_address),
-                     'mapped_port': os.environ['exposed_port'],  # c_port_mapped_to_exposed_port,
+                     'mapped_port': os.environ['exposed_port'],
                      'dw_directory_host': os.environ['DIRECTORY_PORT_5672_TCP_ADDR']}
 
     content = render(template=datawire_config_file, template_vars=template_vars)
