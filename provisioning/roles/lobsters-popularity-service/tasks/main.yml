@@ -1,5 +1,0 @@
-- include: add.yml
-  when: state == "present"
-
-- include: remove.yml
-  when: state == "absent"
