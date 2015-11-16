@@ -33,11 +33,6 @@
     state: restarted
   when: git_commit != "UNCOMMITTED" and git_commit != "UNCOMMITTED_COPY"
 
-- name: copy current sources to temporary location (uncommitted changes)
-  command: cp -R {{ microwizard_sources }}/{{ service_name }} {{ microwizard_docker_volumes }}/{{ service_name }}_{{ tag }}
-  register: copy_location
-  when: git_commit == "UNCOMMITTED_COPY"
-
 - name: start the container (uncommitted changes)
   docker:
     name: "{{ container_name.stdout }}"
@@ -58,11 +53,9 @@
 
 - name: copy current uncommitted sources to temporary location
   command: cp -R {{ microwizard_sources }}/{{ service_name }} {{ microwizard_docker_volumes }}/{{ service_name }}_{{ tag }}
-  #args:
-  #  creates: "{{ microwizard_docker_volumes }}/{{ service_name }}_{{ tag }}"
   when: git_commit == "UNCOMMITTED_COPY"
 
-- name: start the container (uncommitted changes)
+- name: start the container (uncommitted-copy changes)
   docker:
     name: "{{ container_name.stdout }}"
     image: microwizard/generic-service
