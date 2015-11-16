@@ -4,7 +4,8 @@
 # svrun2
 #
 # Runs a new service on the MicroWizard host. The Git commit is optional and if not provided then the UNCOMMITTED
-# changes will be used. This is handy for development.
+# changes will be used. This is handy for development since the development system filesystem is shared with vbox which
+# then uses the source tree as a volume.
 #
 # Usage:
 #   svrun2 <service_name> <tag> [git_commit]
