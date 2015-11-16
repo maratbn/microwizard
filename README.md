@@ -2,10 +2,10 @@
 
 The Datawire Microwizard is a sandbox tool for playing with microservices. It is a very basic reference architecture for building, deploying and fiddling about with microservices.
 
-At the moment we envision Microwizard as a Getting Started tool for developers that zero experience with microservice architectures. In its current state it's a great tool for getting your feet wet and seeing what the benefits of microservices. A common challenge that developers face in developing microservices is how to migrate from a monolith to a microservices architecture. The Playground is intended to serve as an example on how to add a single microservice to an existing monolith, enabling more rapid feature development.
+At the moment we envision Microwizard as a Getting Started tool for developers that zero experience with microservice architectures. In its current state it's a great tool for getting your feet wet and seeing what the benefits of microservices. A common challenge that developers face in developing microservices is how to migrate from a monolith to a microservices architecture. MicroWizard is intended to serve as an example on how to add a single microservice to an existing monolith, enabling more rapid feature development.
 
-The Playground uses an existing Ruby on Rails application named
-[Lobsters](https://github.com/jcs/lobsters) as an existing application, and adds functionality to the main application via a new Python microservice.
+By default, MicroWizard ships with and uses an existing Ruby on Rails application named
+[Lobsters](https://github.com/jcs/lobsters) as the demonstration monolith. In the example we add new functionality to the main application via a new Python microservice.
 
 # Requirements #
 
@@ -19,37 +19,19 @@ The Microwizard base system runs inside of a VirtualBox VM. We provision the VM 
 
 # Quick Start #
 
-1. Clone the Playground project on GitHub, as well as some of the Git submodules linked into this repository: 
+1. Clone the MicroWizard project on GitHub, as well as some of the Git submodules linked into this repository: 
 
 `git clone --recursive git@github.com:datawire/microwizard.git`
 
-2. Run `vagrant up`. This will take a few minutes as the Microwizard bootstraps inside the VM.
-   
-4. Go to http://localhost:3000/ to see the Lobster webapp running.
-
-Now the fun part:
-
-5. We introduce a bug in the popularity component, e.g., the
-popularity algorithm takes 1000 longer to compute. We make the change
-live.
-  - Notice how the website still works even though the popularity calc doesn't appear for awhile
-  - If this were in the monolith the monolith would grind to a halt
-
-6. Fix the code, and do an incremental rollout of the code.
-   - Make sure no regressions, you can see for 50% of the loads it's pretty fast and for the other 50% it's not
-
-
-This is what's great about microservices:
-
- - independently deployable code
- - resilience to software bugs
-
+2. Run `vagrant up`. This will take a few minutes as the MicroWizard bootstraps inside the VM.
+3. Once the initial provisioning has completed run ./scripts/lobsters-up to bring up the demonstration monolith application. It usually takes anywhere from 3 to 5 minutes for Lobsters to fully provision itself for use.
+4. Go to http://127.0.0.1:3000/ to see the Lobster webapp running.
 
 # Checking the Environment #
 
-Once the system is bootstrapped you should be able to access the Lobsters application by navigating a web browser to http://localhost:3000 which for the purpose of this little example tool represents our "Monolith" application that we will glue microservice functionality onto.
+Once the system is bootstrapped you should be able to access the Lobsters application by navigating a web browser to http://127.0.0.1:3000 which for the purpose of this example represents our "Monolith" application that we will glue microservice functionality onto. Occasionally this component will not be available immediately after MicroWizard provisions because dependencies and other Rails stuff are still being pulled from the internet. Just keep trying and it usually becomes available within a minute or two.
 
-You'll notice that once you reach that web page there is a link at the top "Most Popular Users" that is not normally present in a standard Lobsters install. This link has been created for you and will generate a web page that has data populated from a web service.
+You'll notice that once you reach that web page there is a link at the top "Most Popular Users" that is not normally present in a standard Lobsters install. The link has been created for you and will generate a web page that has data populated from a web service.
 
 # Fun Part #
 
@@ -57,55 +39,62 @@ You'll notice that once you reach that web page there is a link at the top "Most
 
 2. In the base deployment of the Microwizard example you'll notice that if you go to http://localhost:3000/popular then no users will be displayed and a string like "NO SERVICES AVAILABLE" will be shown. This is because in the base deployment no services are deployed.
 
-3. Let's deploy a service. The lobsters-popularity service project comes with two Git committed files that are ready to use for this demo. Let's deploy a couple of the healthy services into the environment, run the following commands:
+3. Let's deploy a service! Leave the popularity.py file as it is for the moment and run the following commands to launch three new lobster-popularity microservices
 
-`./scripts/svrun lobpop_v1 149d2b01`
+```
+./scripts/svrun lobsters-popularity lobpop_v1 UNCOMMITTED_COPY
+./scripts/svrun lobsters-popularity lobpop_v1 UNCOMMITTED_COPY
+./scripts/svrun lobsters-popularity lobpop_v1 UNCOMMITTED_COPY
+```
 
-`./scripts/svrun lobpop_v1 149d2b01`
+The "UNCOMMITTED_COPY" argument tells MicroWizard that it should take the current state of your repository; copy it to a new directory on the Docker host and then mount the code as a Docker volume. Effectively this means you are running your current changes when the service starts.
 
-The `149d2b019` part is a git commit hash. Microwizard works by deploying Git repositories and using a specific hash. The first time you run the command it may take a moment as the container image for lobsters-popularity is built.
+4. Once the containers are deployed go back to http://127.0.0.1:3000/popular and you should see some data on the page. Some other statistical information is displayed like the query speed and which service handled the request.
 
-4. Once the containers are deployed go back to http://localhost:3000/popular and you should see some data on the page. Some other statistical information is displayed like the query speed and which service handled the request.
+5. Let's make a bad modification to our service and then do a canary deploy. Open up the popularity.py file and find the following two lines:
 
-5. Let's deploy a slightly broken service. The broken service runs very slowly in comparison to the previous two ones. It can be deployed by using the following command:
+```
+#users = inefficient_query()
+users = efficient_query()
+```
 
-`./scripts/svrun lobpop_v2 3c35bc45`
+Change the code to look like this:
 
-6. Once it is up and running refresh the http://localhost:3000/popular page and you should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service, hoever, even though the service is operating slowly it is not causing the rest of the application to grind to a halt!
+```
+users = inefficient_query()
+#users = efficient_query()
+```
+
+6. Let's roll out one of the poorly implemented services:
+
+```./scripts/svrun lobsters-popularity lobpop_v2 UNCOMMITTED_COPY```
+
+7. Once it is up and running refresh the http://localhost:3000/popular page and you should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service, hoever, even though the service is operating slowly it is not causing the rest of the application to grind to a halt!
+
+8. To remove the bad service run the following command:
+
+```./scripts/svkill lobpop_v2```
 
 # Microwizard Architecture #
 
 How does this all work?
 
-* The monolithic Lobsters Ruby on Rails application, running in a Docker container
-* MariaDB
-* The popularity microservice, written as a Python application
-* A simple service discovery service
+The demonstration is composed of the following pieces which all run inside Docker containers:
 
+1. Lobsters Ruby on Rails application
+2. MariaDB (open source MySQL fork)
+3. Popularity microservice written in Python Flask.
+4. Baker Street
 
+Microservices are written so that during initialization of their container they connect to the Datawire Directory which powers Baker Street's powerful service discovery mechanism. Microservices should have a directory called microwizard/ in their root project directory. This directory contains three important files:
 
+1. datawire.conf - configures Datawire settings 
+2. microwizard.yml - describes the deployment to Microwizard
+3. mw.sh - your services initialization and startup routines.
 
-# Building a new Microservice #
-
-Let's build a new containerized Microservice...
-
-# Launching the Microservices #
-
-Launching a new microservice
-
-* Service implements a new feature... let's call it the popularity service which returns the most popular users by their
-karma
-
-* Implement the service in Python or Node.
-* Communicate with MariaDB to run the simple query
-* Actually launches two of these services 
-
-# Consuming the Microservice #
-
-How to use the microservice from inside their dev and production environments
-
-* Update Lobster to have a new URL that communicates with the Popularity Service
-* Renders that data
+When modifying datawire.conf for your microserice the only relevant fields for a developer are service_name, service_url, and health_check_url.
+When modifying microwizard.yml ensure that service_name matches the service_name in datawire.conf also update the service_port to the same value in datawire.conf service_url.
+When modifying mw.sh then all that's required is to implement the body of the init and run bash functions.
 
 # How it works #
 
@@ -117,13 +106,11 @@ How to use the microservice from inside their dev and production environments
 
 # Architecture Overview and Issues #
 
-First and foremost it is important to understand that this was built as a demo. Certain architectural choices were made that would likely not be OK in a true production microservices environment. These decisions were made because the premise of the demo was to show people how they could get started with microservices rather than to provide a true generic reference architecture.
+First and foremost it is important to understand that this was built as a demo. Certain architectural choices were made that would likely not be OK in a production microservices environment. These decisions were made because the premise of the demo was to show people how they could get started with microservices rather than to provide a true generic reference architecture.
 
 All the services in the architecture were designed to run inside of a container. For the most part we have hidden the container image build process away from the developer in this demo. During the initial provisioning process we build a base Docker image that contains Datawire components such as Watson and Sherlock (/docker/images/base). Developers for convenience are expected to base their service images off this particular image rather than generating their own, however, it is not a hard requirement to do that.
 
 One of the bigger flaws in the design right now is that in order to properly map service addresses into the Datawire directory we need to mount the host controller Docker process as a volume onto each service. This allows us to then query the ephemeral port assigned by Docker to the service so that we can properly map the address into the Directory. The major problem with this approach is that individual containers then have read/write access to the entire Docker environment which is likely not desireable. A more robust solution would be to maintain our own mapping of ports which we then tell Docker about when running a new container. Another approach would be to run a process on the host machine that can query the API for containers.
-
-1. Dynamically resolved and provisioned service dependencies.
 
 # Implementing Custom Microservices #
 
