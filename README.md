@@ -53,9 +53,7 @@ You'll notice that this web page has a link at the top called "Most Popular User
 ./scripts/svrun lobsters-popularity lobpop_v1 UNCOMMITTED_COPY
 ```
 
-The UNCOMMITTED_COPY argument tells the Microwizard service that it should take the current state of your repository (instead of deploying from the official system of record at GitHub), copy it to a new directory on the Docker host, and then mount the code as a Docker volume. Effectively this means you are running your current changes when the service starts.
-
-[[PAL: We're not really integrated with GitHub in this example. The system of record is really a local Git repository]]
+The UNCOMMITTED_COPY argument tells the Microwizard service that it should take the current state of your repository (instead of deploying from the official system of record, the committed state within git), copy it to a new directory on the Docker host, and then mount the code as a Docker volume. Effectively this means you are running your current changes when the service starts.
 
 4. Once the containers are deployed, go back to http://127.0.0.1:3000/popular and you should see some data on the page including statistical information like the query speed and which service handled the request.
 
@@ -98,26 +96,11 @@ The demonstration is composed of the following pieces which all run inside Docke
 
 The popularity microservice is written so that during initialization of each instance's container the instance is registered as alive by its local Watson component which sends the information to the Datawire Directory. The Sherlock instance we added to the Lobsters monolith subscribes to popularity service availability information and receives push notices from the Datawire Directory indicating new instances are available as each instance is brought up. Calls to the popularity microservice instances at each page reload is distributed among all of the available instances as noted in the local Sherlock.
 
-The popularity microservice has a directory called microwizard/ in its root project directory. This directory contains three important files:
+The popularity microservice has a directory called microwizard/ in its root project directory. This directory contains three important files that configure everything and make it all work:
 
 1. datawire.conf - configures Datawire settings 
 2. microwizard.yml - describes the deployment to Microwizard
 3. mw.sh - the service initialization and startup routines.
-
-You can add additional microservices to this environment using these same files with some minor modifications:
-
-* The only relevant fields for a developer are service_name, service_url, and health_check_url. 
-* When modifying microwizard.yml, ensure that the service_name field matches the service_name field in datawire.conf and also update the service_port to the same value that's in the service_url field of datawire.conf.
-
-[[JMK we don't actually tell them how to set these - what values should be used? do we edit the existing values and just substitute the main service url for the existing one?]]
-
-[[PAL: It's just the bakerstreet values... so service_url is going be localhost:<service_port>[/path/to/service]. Same thing for health_check_url and service_name]] 
-
-The only changes needed in mw.sh are to implement the body of the init and run bash functions.
-
-[[JMK run which bash functions?]]
-
-[[PAL: 'run' is the name of the function ]]
 
 # How it works #
 
@@ -131,15 +114,15 @@ The only changes needed in mw.sh are to implement the body of the init and run b
 
 # Implementing Custom Microservices #
 
-Implementing a custom microservice is really simple. The provisioning system baked with MicroWizard means you only need to concentrate on application/service code and can forget about deployment and wiring.
+Implementing a custom microservice in this environment is really simple, but remember that it is not designed for production and does not have many of the features required for a production environment. The provisioning system baked with MicroWizard means you only need to concentrate on application/service code and can forget about deployment and wiring.
 
 1. Copy the template microservice
-2. Modify the template microwizard.yml file with your service name, exposed port and necessary links
-3. Modify the mw.sh script and update the init and run functions as necessary.
+2. Modify the template microwizard.yml file with your service name, exposed port and necessary links. You should be modifying the service_name, service_url, and health_check_url fields.
+3. Modify the mw.sh script and update the run and init functions as necessary.
 
-[[JMK If we're doing this as a separate section down here then why are we talking about modifying the config files above? should the same consistency warnings be here?]]
+Make sure that the service_name field in microwizard.yml matches the service_name field in datawire.conf and that the service_port in microwizard.yml is the same value that's in the service_url field of datawire.conf.
 
-[[PAL Not sure I follow?]]
+You should be able to substitute the base URL for your new service for the URL for the popularity service. If you need additional help, see the [Baker Street documentation](http://bakerstreet.io/docs/quickstart.html).
 
 # FAQ #
 
