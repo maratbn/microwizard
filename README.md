@@ -43,7 +43,7 @@ You'll notice that this web page has a link at the top called "Most Popular User
 
 1. Open up `src/lobsters-popularity/popularity.py`. This is our microservice. Notice that it starts a simple web server and exposes two URLs: / and /health. /health is for processing health checks and / provides the meat of the service by querying the MySQL DB used by the existing monolith for the most popular Lobsters users (as determined by karma points)
 
-2. In the base deployment of the Microwizard example at http://localhost:3000/popular you'll notice that no users are displayed and a string like "NO SERVICES AVAILABLE" is shown. This is because no services are deployed by default.
+2. In the base deployment of the Microwizard example at http://localhost:3000/popular you'll notice that no users are displayed and the string "NO SERVICES AVAILABLE" is shown. This is because no services are deployed by default.
 
 3. Let's deploy a service! Leave the popularity.py file as it is for the moment and run the following commands to launch three new lobster-popularity microservices
 
@@ -54,6 +54,8 @@ You'll notice that this web page has a link at the top called "Most Popular User
 ```
 
 The UNCOMMITTED_COPY argument tells the Microwizard service that it should take the current state of your repository (instead of deploying from the official system of record at GitHub), copy it to a new directory on the Docker host, and then mount the code as a Docker volume. Effectively this means you are running your current changes when the service starts.
+
+[[PAL: We're not really integrated with GitHub in this example. The system of record is really a local Git repository]]
 
 4. Once the containers are deployed, go back to http://127.0.0.1:3000/popular and you should see some data on the page including statistical information like the query speed and which service handled the request.
 
@@ -75,13 +77,13 @@ users = inefficient_query()
 
 ```./scripts/svrun lobsters-popularity lobpop_v2 UNCOMMITTED_COPY```
 
-7. Once it is up and running, refresh the http://localhost:3000/popular page repeatedly. You should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service with the inefficient code. Note that even though the service is operating slowly it is not causing the rest of the application to grind to a halt! You can demonstrate this by clicking on other links within the Lobsters application and noticing that they all load quickly even when the microservice page is slow.
+7. Once it is up and running, refresh the http://127.0.0.1:3000/popular page repeatedly. You should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service with the inefficient code. Note that even though the service is operating slowly it is not causing the rest of the application to grind to a halt! You can demonstrate this by clicking on other links within the Lobsters application and noticing that they all load quickly even when the microservice page is slow.
 
 8. To remove the bad service run the following command:
 
 ```./scripts/svkill lobpop_v2```
 
-9. Refresh the http://localhost:3000/popular page repeatedly and notice that all of the page loads are fast. The slow loads are gone because we removed the instance running the bad code.
+9. Refresh the http://127.0.0.1:3000/popular page repeatedly and notice that all of the page loads are fast. The slow loads are gone because we removed the instance running the bad code.
 
 # Microwizard Architecture #
 
@@ -109,9 +111,13 @@ You can add additional microservices to this environment using these same files 
 
 [[JMK we don't actually tell them how to set these - what values should be used? do we edit the existing values and just substitute the main service url for the existing one?]]
 
+[[PAL: It's just the bakerstreet values... so service_url is going be localhost:<service_port>[/path/to/service]. Same thing for health_check_url and service_name]] 
+
 The only changes needed in mw.sh are to implement the body of the init and run bash functions.
 
 [[JMK run which bash functions?]]
+
+[[PAL: 'run' is the name of the function ]]
 
 # How it works #
 
@@ -119,8 +125,8 @@ The only changes needed in mw.sh are to implement the body of the init and run b
 2. When a new service is launched the Microwizard performs a checkout against the specified Git commit. 
 3. The checked out code is moved into a directory specifically for that commit. 
 4. Microwizard then launches a container and mounts the source code as a volume on the container.
-5. The container starts and runs some initialization logic (see docker/images/lobsters-popularity/init directory).
-6. The container then starts the service process.
+5. The container starts and runs the init() function in your services mw.sh
+6. The container starts and runs the run() function in your services mw.sh
 7. Sherlock and Watson are automatically installed on the container so when the service starts it automatically registers with the Datawire directory.
 
 # Implementing Custom Microservices #
@@ -132,6 +138,8 @@ Implementing a custom microservice is really simple. The provisioning system bak
 3. Modify the mw.sh script and update the init and run functions as necessary.
 
 [[JMK If we're doing this as a separate section down here then why are we talking about modifying the config files above? should the same consistency warnings be here?]]
+
+[[PAL Not sure I follow?]]
 
 # FAQ #
 
