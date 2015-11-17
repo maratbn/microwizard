@@ -15,6 +15,8 @@ One of the bigger flaws in the design right now is that to properly map service 
 
 [[JMK is the read/write access a security risk? something else? I feel like a very brief explanation of why this is not good would improve this]]
 
+[[PAL: Yes it is a large security risk because it means a container has access to the entire operating environment including the ability to destroy other containers.]]
+
 #Requirements
 
 The Microwizard base system runs inside of a VirtualBox VM. We provision the VM using Vagrant and then use a combination of shell scripts, Ansible playbooks, and custom code to smooth over the experience. Developers should have the following software installed before trying to use Datawire Microwizard:
@@ -41,9 +43,13 @@ As mentioned above, once the system is bootstrapped you should be able to access
 
 [[JMK The entire paragraph above seem redundant given the last line above]]
 
+[[PAL: Prolly needs some reworking. The command tends to exit faster than the provisioning of lobsters so the app won't be up when the lobsters-up command finishes. This is probably an area for improvement code-wise. Basically poll to see if it's up before returning. For now we'll just need to document around it and mention it will be at 127.0.0.1:3000 but it needs a minute or two and just keep refrshing]]
+
 You'll notice that this web page has a link at the top called "Most Popular Users" - this is not normally present in a standard Lobsters install. The link has been created for you and will generate a new web page with data populated from a new microservice.
 
 [[JMK Is this link part of the microservice or did we make a change to Lobsters to display it and link to the microservice location?]]
+
+[[PAL: Link is a modification to the Lobsters monolith itself]]
 
 # Fun Part - Launching a microservice!#
 
@@ -51,6 +57,8 @@ You'll notice that this web page has a link at the top called "Most Popular User
 for the most popular Lobsters users (as determined by Karma)
 
 [[JMK where did the MySQL and Karma come in? They were not mentioned as part of the system before]]
+
+[[PAL: MySQL is implementation detail of the monolith. Lobsters needs MySQL to run. It runs in its own container right now alongside everything else. It's the "MySQL service" for lack of a better way to phrase it. As for karma, that's just points like on HN or Reddit. Karma is the thing we are aggregating and showing]]
 
 2. In the base deployment of the Microwizard example at http://localhost:3000/popular you'll notice that no users are displayed and a string like "NO SERVICES AVAILABLE" is shown. This is because no services are deployed by default.
 
@@ -66,11 +74,15 @@ The UNCOMMITTED_COPY argument tells the Microwizard service that it should take 
 
 [[JMK copy what? am I supposed to already know how to use Docker? We said above that we just need Vagrant, Ansible, and VirtualBox - where did Docker come in ETA: by moving the architectures/issues section to the top we provide some of the context needed for this instruction to make sense, but we still assume that folks know how to use Docker - if we want this to be a requirement we should list it as such. If not, we should provide some instructions or a link with instructions]]
 
+[[PAL: You're not copying anything. I'm explaining what it does behind the scenes. When you invoke svrun with UNCOMMITTED_COPY then it copies your source tree and mounts it as a Docker volume. You are correct that the end user does not need to know how this works, but I'm describing what's occuring behind the scenes a bit... I'm open to better ideas about how to frame this]]
+
 4. Once the containers are deployed, go back to http://127.0.0.1:3000/popular and you should see some data on the page including statistical information like the query speed and which service handled the request.
 
 5. Let's make a bad modification to our service and then do a canary deploy to only one microservice instance. Open up the popularity.py file and find the following two lines:
 
 [[JMK do we need to define canary deploy? or we could just omit the word and just say deploy to only one instance]]
+
+[[PAL: Maybe? A canary deploy is when you rollout a small subset of your service (like 1) and then test to make sure it works. If it works, then you rollout more otherwise you roll it back]]
 
 ```
 #users = inefficient_query()
@@ -90,15 +102,21 @@ users = inefficient_query()
 
 [[JMK Is this a new instance? Your description above (which I edited slightly) made it seem like we were updating one of the three existing instances]]
 
+[[PAL: new instance]]
+
 7. Once it is up and running, refresh the http://localhost:3000/popular page repeatedly. You should notice that occasionally the page takes a long time to load. This is because Baker Street is routing to the service with the inefficient code. Note that even though the service is operating slowly it is not causing the rest of the application to grind to a halt!
 
 [[JMK how can we tell? all we're looking at is the microservice - can we go somewhere else and see other things operating smoothly while the microservice page is slow?]]
+
+[[PAL Sure click any of the other links in the Lobsters application]]
 
 8. To remove the bad service run the following command:
 
 ```./scripts/svkill lobpop_v2```
 
 [[JMK we should loop back and show that the page loads quickly again]]
+
+[[PAL Good Idea]]
 
 # Microwizard Architecture #
 
