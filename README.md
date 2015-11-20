@@ -19,7 +19,7 @@ The Microwizard base system runs inside of a VirtualBox VM. We provision the VM 
 
 | Software | Version | Instructions |
 | -------- | ------- | ------------------------- |
-| Ansible  | >=1.9.4 | [Install](http://docs.ansible.com/ansible/intro_installation.html) |
+| Ansible  | >=1.9.4 | `pip ansible install` or see the official [install](http://docs.ansible.com/ansible/intro_installation.html) instructions |
 | Vagrant  | >=1.7.4 | [Install](https://docs.vagrantup.com/v2/installation/index.html) |
 | VirtualBox | >= 5.0 | [Install](https://www.virtualbox.org/wiki/Downloads) |
 
@@ -29,13 +29,15 @@ The Microwizard base system runs inside of a VirtualBox VM. We provision the VM 
 
 `git clone --recursive git@github.com:datawire/microwizard.git`
 
-2. Start vagrant by running `vagrant up`. This will take a few minutes as the Microwizard bootstraps inside the VM.
-3. Once the initial provisioning has completed run `./scripts/lobsters-up` to bring up the demonstration monolith application. Be patient - it can take anywhere from 3 to 5 minutes for Lobsters to fully provision itself for use and the script may return before this is complete (see below).
+Note: Using the --recursive flag is equivalent to running `git submodule init && git submodule update` after a normal git clone command. 
+
+2. Start vagrant by running `vagrant up`. This will take some time as the Microwizard bootstraps inside the VM, possibly as long as 15-20 minutes depending on your system - be patient, this step is automating a lot of configuration so you don't have to do it manually.
+3. Once the initial provisioning has completed run `./scripts/lobsters-up` to bring up the demonstration monolith application. Note that it usually takes from 3 to 5 minutes for Lobsters to fully provision itself for use (and can take even longer at times).
 4. Go to http://127.0.0.1:3000/ to see the Lobster application running.
 
 # Checking the Environment #
 
-As mentioned above, once the system is bootstrapped you should be able to access the Lobsters application by navigating to http://127.0.0.1:3000 in a web browser. This represents the monolith application prior to adding any new microservices. If the page is not available right away, keep trying. The provisioning command may exit before all of the dependencies are fully downloaded as it can take a few minutes before everything is in place. This is another case where we took a shortcut because this is a demo; in a production system the provisioning call would poll to make sure the service was fully available before returning.
+As mentioned above, once the system is bootstrapped you should be able to access the Lobsters application by navigating to http://127.0.0.1:3000 in a web browser. This represents the monolith application prior to adding any new microservices.
 
 You'll notice that this web page has a link at the top called "Most Popular Users" - this is not normally present in a standard Lobsters install; we added it to the monolith to provide access to data from the new microservice.
 
@@ -43,7 +45,7 @@ You'll notice that this web page has a link at the top called "Most Popular User
 
 1. Open up `src/lobsters-popularity/popularity.py`. This is our microservice. Notice that it starts a simple web server and exposes two URLs: / and /health. /health is for processing health checks and / provides the meat of the service by querying the MySQL DB used by the existing monolith for the most popular Lobsters users (as determined by karma points)
 
-2. In the base deployment of the Microwizard example at http://localhost:3000/popular you'll notice that no users are displayed and the string "NO SERVICES AVAILABLE" is shown. This is because no services are deployed by default.
+2. In the base deployment of the Microwizard example at http://127.0.0.1:3000/popular you'll notice that no users are displayed and the string "NO SERVICES AVAILABLE" is shown. This is because no services are deployed by default.
 
 3. Let's deploy a service! Leave the popularity.py file as it is for the moment and run the following commands to launch three new lobster-popularity microservices
 
@@ -57,7 +59,7 @@ The UNCOMMITTED_COPY argument tells the Microwizard service that it should take 
 
 4. Once the containers are deployed, go back to http://127.0.0.1:3000/popular and you should see some data on the page including statistical information like the query speed and which service handled the request.
 
-5. Let's make a bad modification to our service and then deploy it to one new microservice instance without modifying the three existing instances. Open up the popularity.py file and find the following two lines:
+5. Let's make a bad modification to our service and then deploy it to one new microservice instance without modifying the three existing instances. Open up the popularity.py file at `src/lobsters-popularity/popularity.py` and find the following two lines:
 
 ```
 #users = inefficient_query()
@@ -124,5 +126,10 @@ Make sure that the service_name field in microwizard.yml matches the service_nam
 
 You should be able to substitute the base URL for your new service for the URL for the popularity service. If you need additional help, see the [Baker Street documentation](http://bakerstreet.io/docs/quickstart.html).
 
-# FAQ #
+# FAQ
 
+*Q*: Where can I report problems or suggest improvements to the micro wizard?
+*A*: Please use the [Issues list](https://github.com/datawire/microwizard/issues) of the Microwizard GitHub repository to report a problem or suggest an improvement.
+
+*Q*: Are there any known issues not covered in this README?
+*A*: Yes, known issues are tracked in the [Issues list](https://github.com/datawire/microwizard/issues) of the Microwizard GitHub repository.
