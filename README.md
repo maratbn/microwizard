@@ -73,7 +73,7 @@ users = inefficient_query()
 #users = efficient_query()
 ```
 
-6. Roll out one of the poorly implemented services:
+6. Roll out one of the poorly implemented services as follows:
 
 ```./scripts/svrun lobsters-popularity lobpop_v2 UNCOMMITTED_COPY```
 
