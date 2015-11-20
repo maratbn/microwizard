@@ -128,8 +128,10 @@ You should be able to substitute the base URL for your new service for the URL f
 
 # FAQ
 
-*Q*: Where can I report problems or suggest improvements to the micro wizard?
-*A*: Please use the [Issues list](https://github.com/datawire/microwizard/issues) of the Microwizard GitHub repository to report a problem or suggest an improvement.
+**Q**: Where can I report problems or suggest improvements to the micro wizard?
 
-*Q*: Are there any known issues not covered in this README?
-*A*: Yes, known issues are tracked in the [Issues list](https://github.com/datawire/microwizard/issues) of the Microwizard GitHub repository.
+**A**: Please use the [Issues list](https://github.com/datawire/microwizard/issues) of the Microwizard GitHub repository to report a problem or suggest an improvement.
+
+**Q**: Are there any known issues not covered in this README?
+
+**A**: Yes, known issues are tracked in the [Issues list](https://github.com/datawire/microwizard/issues) of the Microwizard GitHub repository.
