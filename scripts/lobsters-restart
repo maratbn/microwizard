@@ -1,17 +1,12 @@
 #!/bin/bash -eu
 
-# Provisions or reloads the lobsters application container.
-
 if [ ! -d ".vagrant/" ]; then
   echo "error: .vagrant directory does not exist. run 'vagrant up' to provision the VM and create this directory"
   exit 1
 fi
 
-echo "---> provisioning lobsters monolith"
-ansible-playbook\
-  -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory\
-  -u vagrant\
-  provisioning/microwizard_lobsters.yml
+echo "---> restarting lobsters monolith"
+vagrant ssh -c "docker restart lobsters" > /dev/null 2>&1
 
 echo "---> waiting for lobsters monolith to become available"
 until $(curl --output /dev/null --silent --head --fail http://127.0.0.1:3000); do
@@ -20,3 +15,4 @@ until $(curl --output /dev/null --silent --head --fail http://127.0.0.1:3000); d
 done
 
 echo ""
+
